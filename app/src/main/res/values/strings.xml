@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SIAGA</string>
+    <string name="masuk">Masuk</string>
+    <string name="absen_harus_foto_selfie_ya">Absen harus Foto Selfie ya!</string>
+    <string name="todo">TODO</string>
+    <string name="ambil_foto_selfie">Ambil Foto Selfie</string>
+    <string name="password">Password</string>
+    <string name="masukan_nama">Masukan Nama</string>
+    <string name="masukan_nip">Masukan NIP</string>
+    <string name="welcome_to_siaga">Welcome to SIAGA</string>
+</resources>
