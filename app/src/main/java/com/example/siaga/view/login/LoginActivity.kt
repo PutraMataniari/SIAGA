@@ -12,51 +12,38 @@ import androidx.core.content.ContextCompat
 import com.example.siaga.databinding.ActivityLoginBinding
 import com.example.siaga.view.main.MainActivity
 import com.example.siaga.view.utils.SessionLogin
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var session: SessionLogin
-    private lateinit var database: DatabaseReference
 
-    // Modern permission request
+    // Permission request for location (optional, bisa dihapus jika tidak digunakan)
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (!isGranted) {
-            Toast.makeText(
-                this,
-                "Location permission is required for app functionality",
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, "Lokasi dibutuhkan untuk fitur aplikasi", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("LoginActivity", "onCreate called")
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase
-//        database = Firebase.database.reference.child("users")
+        session = SessionLogin(applicationContext)
 
-        session = SessionLogin(applicationContext as MainActivity)
-
-        checkLoginStatus()
-        setupPermission()
-        setupLoginButton()
-    }
-
-    private fun checkLoginStatus() {
+        // Cek apakah user sudah login
         if (session.isLoggedIn()) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
+            return
         }
+
+        setupPermission()
+        setupLoginButton()
     }
 
     private fun setupPermission() {
@@ -65,15 +52,7 @@ class LoginActivity : AppCompatActivity() {
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                // Permission already granted
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                Toast.makeText(
-                    this,
-                    "Location permission is required for app functionality",
-                    Toast.LENGTH_LONG
-                ).show()
-                locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                // Izin sudah diberikan
             }
             else -> {
                 locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -87,54 +66,17 @@ class LoginActivity : AppCompatActivity() {
             val nip = binding.inputNip.text.toString().trim()
             val password = binding.inputPassword.text.toString().trim()
 
-            when {
-                name.isEmpty() || nip.isEmpty() || password.isEmpty() -> {
-                    Toast.makeText(
-                        this, "All fields are required!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else -> {
-                    val userId = database.push().key ?: run {
-                        Log.e("LoginActivity", "Failed to generate user ID")
-                        Toast.makeText(
-                            this,
-                            "Registration failed, please try again",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@setOnClickListener
-                    }
+            if (name.isEmpty() || nip.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Semua kolom harus diisi!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Simulasi login berhasil
+                session.createLoginSession(name, nip, password)
+                Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
 
-                    saveUserData(userId, name, nip, password)
-                }
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }
-
-    private fun saveUserData(userId: String, name: String, nip: String, password: String) {
-        val user = User(name, nip, password)
-
-        database.child(userId).setValue(user)
-            .addOnSuccessListener {
-                session.createLoginSession(name, nip, password)
-                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(
-                    this,
-                    "Login failed: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("LoginActivity", "Failed to save data", e)
-            }
-    }
-
-    data class User(
-        val name: String,
-        val nip: String,
-        val password: String
-    )
 }
-

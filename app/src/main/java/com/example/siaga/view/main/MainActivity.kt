@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.siaga.databinding.ActivityMainBinding
 import com.example.siaga.view.utils.SessionLogin
-import com.example.siaga.viewmodel.absen.AbsenActivity
+import com.example.siaga.view.absen.AbsenActivity
 import com.example.siaga.view.history.HistoryActivity
 
 

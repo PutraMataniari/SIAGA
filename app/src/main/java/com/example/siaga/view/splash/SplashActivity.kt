@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.siaga.databinding.ActivitySplashBinding
 import com.example.siaga.view.login.LoginActivity
@@ -26,7 +27,7 @@ class SplashActivity : AppCompatActivity () {//Class utama untuk splash
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("SplashActivity", "onCreate called")
         //Inisialisasi view binding
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root) //Set layout dari binding

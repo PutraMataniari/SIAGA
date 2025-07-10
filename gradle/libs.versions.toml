@@ -1,6 +1,6 @@
 [versions]
-agp = "8.1.4"
-kotlin = "1.9.21"
+agp = "8.6.0"
+kotlin = "2.0.21"
 kotlin-kapt = "1.9.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -11,8 +11,8 @@ lifecycleRuntimeKtx = "2.9.0"
 #composeBom = "2024.09.00"
 appcompat = "1.7.0"
 material = "1.12.0"
-roomCommonJvm = "2.7.1"
-roomRuntimeJvm = "2.7.1"
+#roomCommonJvm = "2.7.1"
+#roomRuntimeJvm = "2.7.1"
 gridlayout = "1.1.0"
 play-services-location = "21.3.0"
 androidx-constraintlayout = "2.2.1"
@@ -26,7 +26,7 @@ google-services = "4.4.3"
 activityktx = "1.10.1"
 lifecyclektx = "2.6.2"
 recyclerview = "1.4.0"
-firebaseFirestore = "25.1.4"
+#firebaseFirestore = "25.1.4"
 
 
 [libraries]
@@ -55,8 +55,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 #Room
-androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
-androidx-room-runtime-jvm = { group = "androidx.room", name = "room-runtime-jvm", version.ref = "roomRuntimeJvm" }
+#androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+#androidx-room-runtime-jvm = { group = "androidx.room", name = "room-runtime-jvm", version.ref = "roomRuntimeJvm" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
@@ -80,7 +80,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+#firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 
 [plugins]

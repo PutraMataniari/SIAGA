@@ -22,8 +22,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="76dp"
-            android:orientation="vertical"
-            tools:ignore="MissingClass">
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="150dp"
@@ -39,8 +38,8 @@
                 android:text="@string/welcome_to_siaga"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="22sp"
+               android:fontFamily="@font/poppins_bold" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -77,7 +76,8 @@
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:fontFamily="@font/poppins_medium"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,7 +105,8 @@
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:fontFamily="@font/poppins_medium"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +136,8 @@
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:fontFamily="@font/poppins_medium"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,9 +165,11 @@
                         android:layout_marginTop="50dp"
                         android:layout_marginEnd="40dp"
                         android:layout_marginBottom="10dp"
-                        android:backgroundTint="@android:color/holo_red_light"
+                        android:background="@color/red"
                         android:text="@string/masuk"
                         android:textAllCaps="false"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/white"
                         app:cornerRadius="20dp"
                         app:elevation="5dp" />

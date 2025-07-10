@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@color/transparent"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -72,7 +72,6 @@
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginStart="20dp"
-                            android:contentDescription="@string/todo"
                             android:src="@drawable/ic_info" />
 
                         <TextView
@@ -81,9 +80,10 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
-                            android:text="@string/absen_harus_foto_selfie_ya"
+                            android:text="Absen harus Foto Selfie ya!"
                             android:textColor="@color/white"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:fontFamily="@font/poppins_semibold"/>
 
                     </LinearLayout>
 
@@ -100,10 +100,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:text="@string/ambil_foto_selfie"
+                            android:text="Ambil Foto Selfie"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold" />
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -116,7 +116,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_horizontal"
                                 android:adjustViewBounds="true"
-                                android:contentDescription="TODO"
                                 android:src="@drawable/ic_photo_camera" />
 
                         </FrameLayout>
@@ -137,52 +136,52 @@
                             android:text="Nama Anda"
                             android:textColor="@color/black"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold" />
 
                         <EditText
                             android:id="@+id/inputNama"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:autofillHints=""
                             android:backgroundTint="@android:color/holo_red_light"
                             android:hint="Masukan nama Anda"
                             android:imeOptions="actionNext"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_regular"/>
 
                     </LinearLayout>
 
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="20dp"
-                                            android:layout_marginTop="20dp"
-                                            android:layout_marginEnd="20dp"
-                                            android:orientation="vertical">
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="20dp"-->
+                    <!--                        android:layout_marginTop="20dp"-->
+                    <!--                        android:layout_marginEnd="20dp"-->
+                    <!--                        android:orientation="vertical">-->
 
-                                            <TextView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="NIP Anda"
-                                                android:textColor="@color/black"
-                                                android:textSize="14sp"
-                                                android:textStyle="bold" />
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="NIP Anda"-->
+                    <!--                            android:textColor="@color/black"-->
+                    <!--                            android:textSize="14sp"-->
+                    <!--                            android:textStyle="bold" />-->
 
-                                            <EditText
-                                                android:id="@+id/inputNip"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="50dp"
-                                                android:backgroundTint="@android:color/holo_red_light"
-                                                android:hint="Masukan NIP Anda"
-                                                android:imeOptions="actionNext"
-                                                android:maxLines="1"
-                                                android:singleLine="true"
-                                                android:textColor="@color/black"
-                                                android:textSize="16sp" />
+                    <!--                        <EditText-->
+                    <!--                            android:id="@+id/inputNip"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="50dp"-->
+                    <!--                            android:backgroundTint="@android:color/holo_red_light"-->
+                    <!--                            android:hint="Masukan NIP Anda"-->
+                    <!--                            android:imeOptions="actionNext"-->
+                    <!--                            android:maxLines="1"-->
+                    <!--                            android:singleLine="true"-->
+                    <!--                            android:textColor="@color/black"-->
+                    <!--                            android:textSize="16sp" />-->
 
-                                        </LinearLayout>
+                    <!--                    </LinearLayout>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -198,7 +197,7 @@
                             android:text="Tanggal &amp; Waktu"
                             android:textColor="@color/black"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold" />
 
                         <EditText
                             android:id="@+id/inputTanggal"
@@ -211,7 +210,8 @@
                             android:inputType="date"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_regular"/>
 
                     </LinearLayout>
 
@@ -229,7 +229,7 @@
                             android:text="Lokasi"
                             android:textColor="@color/black"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold" />
 
                         <EditText
                             android:id="@+id/inputLokasi"
@@ -242,7 +242,8 @@
                             android:inputType="date"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_regular"/>
 
                     </LinearLayout>
 
@@ -288,10 +289,12 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="@android:color/holo_red_light"
+                android:background="@color/holo_red_light"
                 android:text="Masuk"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:textSize="24sp"
+                android:fontFamily="@font/poppins_semibold"
                 app:cornerRadius="20dp"
                 app:elevation="5dp" />
 

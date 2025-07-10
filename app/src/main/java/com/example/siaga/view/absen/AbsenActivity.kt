@@ -1,4 +1,4 @@
-package com.example.siaga.viewmodel.absen
+package com.example.siaga.view.absen
 
 import android.Manifest
 import android.app.DatePickerDialog
@@ -27,7 +27,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.siaga.R
 import com.example.siaga.databinding.ActivityAbsenBinding
-import com.example.siaga.view.BuildConfig
 import com.example.siaga.view.utils.BitmapManager.bitmapToBase64
 import com.example.siaga.view.viewmodel.AbsenViewModel
 import com.google.android.gms.location.LocationServices
@@ -35,6 +34,8 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.all
+//import com.example.siaga.BuildConfig
 
 class AbsenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAbsenBinding
@@ -187,7 +188,7 @@ class AbsenActivity : AppCompatActivity() {
             val photoFile = createImageFile()
             cameraUri = FileProvider.getUriForFile(
                 this,
-                "${BuildConfig.APPLICATION_ID}.provider",
+                "${this.packageName}.provider",
                 photoFile
             )
 
