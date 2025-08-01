@@ -165,13 +165,14 @@
                         android:layout_marginTop="50dp"
                         android:layout_marginEnd="40dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@color/red"
+                        android:backgroundTint="@color/red"
                         android:text="@string/masuk"
                         android:textAllCaps="false"
                         android:textSize="24sp"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/white"
-                        app:cornerRadius="20dp"
+                        android:background="@drawable/rounded_button"
+                        app:cornerRadius="0dp"
                         app:elevation="5dp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

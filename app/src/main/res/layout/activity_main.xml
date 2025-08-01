@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- Tombol Logout -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageLogout"
         android:layout_width="35dp"
@@ -17,6 +18,7 @@
         app:srcCompat="@drawable/ic_logout"
         app:tint="@color/black" />
 
+    <!-- Header -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
@@ -25,9 +27,9 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Judul Aplikasi -->
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,10 +39,10 @@
             android:textSize="24sp"
             android:fontFamily="@font/poppins_bold" />
 
+        <!-- Logo KPU -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="280dp"
                 android:layout_height="120dp"
@@ -52,11 +54,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
+        <!-- Deskripsi Absensi -->
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,8 +70,40 @@
             android:textSize="16sp"
             android:fontFamily="@font/poppins_medium"/>
 
+        <!-- Informasi Waktu Absen -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <!-- Jam Absen Masuk -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:text="Absen Masuk: 08:00"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_medium" />
+
+            <!-- Jam Absen Pulang -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:text="Absen Pulang: 17:00"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_medium" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -81,6 +113,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader">
 
+        <!-- Grid Layout for Cards -->
         <androidx.gridlayout.widget.GridLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -91,6 +124,7 @@
             app:rowCount="2"
             tools:ignore="MissingClass">
 
+            <!-- Card View for Absen Masuk -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvAbsenMasuk"
                 android:layout_width="50dp"
@@ -101,13 +135,11 @@
                 app:cardUseCompatPadding="true"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1">
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:elevation="1dp"
                     android:orientation="horizontal">
-
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -118,7 +150,6 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:fontFamily="@font/poppins_semibold" />
-
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -129,9 +160,7 @@
                         android:padding="10dp"
                         android:src="@drawable/ic_arrow"
                         app:tint="@color/black" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -140,15 +169,14 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_klr" />
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_overlay"
                     android:backgroundTint="@android:color/holo_green_dark" />
-
             </androidx.cardview.widget.CardView>
 
+            <!-- Card View for Absen Pulang -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvAbsenKeluar"
                 android:layout_width="50dp"
@@ -159,13 +187,11 @@
                 app:cardUseCompatPadding="true"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1">
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:elevation="1dp"
                     android:orientation="horizontal">
-
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -176,7 +202,6 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:fontFamily="@font/poppins_semibold" />
-
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -187,9 +212,7 @@
                         android:padding="10dp"
                         android:src="@drawable/ic_arrow"
                         app:tint="@color/black" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -198,15 +221,14 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_msk" />
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_overlay"
                     android:backgroundTint="@android:color/holo_red_dark" />
-
             </androidx.cardview.widget.CardView>
 
+            <!-- Card View for Perizinan -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvPerizinan"
                 android:layout_width="50dp"
@@ -217,13 +239,11 @@
                 app:cardUseCompatPadding="true"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1">
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:elevation="1dp"
                     android:orientation="horizontal">
-
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -234,7 +254,6 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:fontFamily="@font/poppins_semibold" />
-
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -245,9 +264,7 @@
                         android:padding="10dp"
                         android:src="@drawable/ic_arrow"
                         app:tint="@color/black" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -256,15 +273,14 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_izin" />
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_overlay"
                     android:backgroundTint="@android:color/holo_blue_dark" />
-
             </androidx.cardview.widget.CardView>
 
+            <!-- Card View for Riwayat Absen -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvHistory"
                 android:layout_width="50dp"
@@ -275,24 +291,21 @@
                 app:cardUseCompatPadding="true"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1">
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:elevation="1dp"
                     android:orientation="horizontal">
-
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        android:text="Riwayat\nAbsen Anda"
+                        android:text="Riwayat\ Absen Anda"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:fontFamily="@font/poppins_semibold" />
-
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -303,9 +316,7 @@
                         android:padding="10dp"
                         android:src="@drawable/ic_arrow"
                         app:tint="@color/black" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -314,17 +325,12 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_history" />
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_overlay"
                     android:backgroundTint="@android:color/holo_orange_dark" />
-
             </androidx.cardview.widget.CardView>
-
         </androidx.gridlayout.widget.GridLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
