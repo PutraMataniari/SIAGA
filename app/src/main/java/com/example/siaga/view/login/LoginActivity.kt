@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (!isGranted) {
-            Toast.makeText(this, "Lokasi dibutuhkan untuk fitur aplikasi", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lokasi dibutuhkan untuk fitur di aplikasi", Toast.LENGTH_SHORT).show()
         }
     }
 

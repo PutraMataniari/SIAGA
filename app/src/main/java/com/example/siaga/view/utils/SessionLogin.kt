@@ -5,46 +5,66 @@ import android.content.Intent
 import android.content.SharedPreferences
 import com.example.siaga.view.login.LoginActivity
 
+class SessionLogin(private val context: Context) {
 
-class SessionLogin(var context: Context) {
-    var pref: SharedPreferences
-    var editor: SharedPreferences.Editor
-    var PRIVATE_MODE = 0
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    private val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-    fun createLoginSession(nama: String, strNip: String, strPassword: String) {
+    /**
+     * Membuat sesi login dengan menyimpan status dan data pengguna
+     */
+    fun createLoginSession(nama: String, nip: String, password: String) {
         editor.putBoolean(IS_LOGIN, true)
         editor.putString(KEY_NAMA, nama)
-        editor.commit()
+        editor.putString(KEY_NIP, nip)
+        editor.putString(KEY_PASSWORD, password)
+        editor.apply() // Gunakan apply() untuk async, lebih aman
     }
 
+    /**
+     * Cek apakah user sudah login. Jika belum, arahkan ke LoginActivity
+     */
     fun checkLogin() {
         if (!isLoggedIn()) {
-            val intent = Intent(context, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            val intent = Intent(context, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             context.startActivity(intent)
         }
     }
 
-    fun logoutUser() {
+    /**
+     * Logout: Hapus sesi dan arahkan ke LoginActivity
+     */
+    fun logout() {
         editor.clear()
-        editor.commit()
-        val intent = Intent(context, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        editor.apply() // Gunakan apply() untuk async
+
+        val intent = Intent(context, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         context.startActivity(intent)
     }
 
-    fun isLoggedIn(): Boolean = pref.getBoolean(IS_LOGIN, false)
+    /**
+     * Cek apakah user sedang login
+     */
+    fun isLoggedIn(): Boolean {
+        return sharedPreferences.getBoolean(IS_LOGIN, false)
+    }
+
+    /**
+     * Ambil data pengguna (opsional, bisa digunakan di MainActivity)
+     */
+    fun getUserNama(): String? = sharedPreferences.getString(KEY_NAMA, null)
+    fun getUserNip(): String? = sharedPreferences.getString(KEY_NIP, null)
+    fun getUserPassword(): String? = sharedPreferences.getString(KEY_PASSWORD, null)
 
     companion object {
         private const val PREF_NAME = "AbsensiPref"
         private const val IS_LOGIN = "IsLoggedIn"
         const val KEY_NAMA = "NAMA"
-    }
-
-    init {
-        pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        editor = pref.edit()
+        const val KEY_NIP = "NIP"
+        const val KEY_PASSWORD = "PASSWORD"
     }
 }
