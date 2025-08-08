@@ -3,15 +3,28 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
-//    alias(libs.plugins.google.services)
     id("com.android.application")
-    id("com.google.gms.google-services")
+//    alias(libs.plugins.google.services)
+//    id("com.google.gms.google-services")
 //    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.example.siaga"
     compileSdk = 35
+
+    packagingOptions {
+        exclude ("META-INF/INDEX.LIST")
+        exclude ("META-INF/io.netty.versions.properties")
+        exclude ("META-INF/DEPENDENCIES")
+        exclude ("META-INF/LICENSE")
+        exclude ("META-INF/NOTICE")
+        exclude ("META-INF/INDEX.LIST")
+        exclude ("META-INF/kotlinx_coroutines_core.version")
+        pickFirst ("META-INF/INDEX.LIST")
+        pickFirst ("META-INF/LICENSE")
+        pickFirst ("META-INF/NOTICE")
+    }
 
     defaultConfig {
         applicationId = "com.example.siaga"
@@ -57,15 +70,31 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.recyclerview)
 //    implementation(libs.material)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    annotationProcessor(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.runtime)
+//    implementation(libs.androidx.room.ktx)
+//    annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.rxandroid)
     implementation(libs.rxjava)
     implementation(libs.glide)
     implementation(libs.hilt.android)
+    implementation(libs.lifecycle.viewmodel.ktx)
+
+    // 🔽 Tambahkan Retrofit dan Gson Converter di sini
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation (libs.datastore.preferences)
+    implementation(libs.androidx.datastore.core.android)
+//    implementation(libs.firebase.appdistribution.gradle)
+
+//hdodenhof
+    implementation(libs.circleimageview)
+
+//    Fragment
+    implementation(libs.androidx.fragment.ktx)
+
     kapt(libs.hilt.compiler)
-    annotationProcessor(libs.glide.compiler)
+
+    kapt(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,4 +1,5 @@
-package com.example.siaga.view.history
+// adapter/HistoryAdapter.kt
+package com.example.siaga.view.adapter
 
 import android.content.Context
 import android.graphics.Color
@@ -6,29 +7,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.siaga.R
 import com.example.siaga.databinding.ListHistoryAbsenBinding
-import com.example.siaga.view.model.ModelDatabase
-import com.example.siaga.view.utils.BitmapManager.base64ToBitmap
+import com.example.siaga.view.model.HistoryResponse
 
-// Definisikan interface di adapter
-interface HistoryAdapterCallback {
-    fun onDelete(modelDatabase: ModelDatabase)
-}
-
-open class HistoryAdapter(
-    private val mContext: Context,
-    private val mAdapterCallback: HistoryActivity // Gunakan interface di sini
+class HistoryAdapter(
+    private val items: MutableList<HistoryResponse>
 ) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
-    private val modelDatabase = mutableListOf<ModelDatabase>()
-
-    fun setData(dataList: List<ModelDatabase>) { // Gunakan metode ini untuk mengatur data
-        this.modelDatabase.clear()
-        this.modelDatabase.addAll(dataList)
-        notifyDataSetChanged()
-    }
+    class ViewHolder(val binding: ListHistoryAbsenBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListHistoryAbsenBinding.inflate(
@@ -38,20 +25,33 @@ open class HistoryAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = modelDatabase[position]
+        val data = items[position]
         with(holder.binding) {
-            tvNomor.text = data.uid.toString()
+            tvNomor.text = data.id.toString()
             tvNama.text = data.nama
-            tvNIP.text = data.nip
+            tvNIP.text = data.jenis
             tvLokasi.text = data.lokasi
-            tvAbsenTime.text = data.tanggal
+            tvAbsenTime.text = data.waktuabsen
             tvStatusAbsen.text = data.keterangan
 
-            Glide.with(mContext)
-                .load(base64ToBitmap(data.fotoSelfie.toString()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ic_photo_camera)
-                .into(imageProfile)
+            // ✅ Gunakan holder.itemView.context sebagai context untuk Glide
+            try {
+                val bitmap = base64ToBitmap(data.gambar)
+                if (bitmap != null) {
+                    Glide.with(holder.itemView.context) // ✅ Perbaikan di sini
+                        .load(bitmap)
+                        .placeholder(R.drawable.ic_photo_camera)
+                        .into(imageProfile)
+                } else {
+                    Glide.with(holder.itemView.context)
+                        .load(R.drawable.ic_photo_camera)
+                        .into(imageProfile)
+                }
+            } catch (e: Exception) {
+                Glide.with(holder.itemView.context)
+                    .load(R.drawable.ic_photo_camera)
+                    .into(imageProfile)
+            }
 
             val color = when (data.keterangan) {
                 "Absen Masuk" -> Color.GREEN
@@ -59,24 +59,25 @@ open class HistoryAdapter(
                 "Izin" -> Color.BLUE
                 else -> Color.GRAY
             }
-            colorStatus.setBackgroundResource(R.drawable.bg_circle_radius)
             colorStatus.setBackgroundColor(color)
         }
     }
 
-    override fun getItemCount(): Int {
-        return modelDatabase.size
+    override fun getItemCount() = items.size
+
+    fun setData(newList: List<HistoryResponse>) {
+        items.clear()
+        items.addAll(newList)
+        notifyDataSetChanged()
     }
 
-    inner class ViewHolder(val binding: ListHistoryAbsenBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.cvHistory.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    mAdapterCallback.onDelete(modelDatabase[position])
-                }
-            }
+    // Fungsi bantu untuk konversi base64 ke Bitmap
+    private fun base64ToBitmap(base64String: String): android.graphics.Bitmap? {
+        return try {
+            val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+            android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        } catch (e: Exception) {
+            null
         }
     }
 }

@@ -26,9 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20sp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_black"
-                android:text="Welcome to SIAGA"
+                android:text="Selamat Datang di SIAGA"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="22sp"
@@ -39,13 +39,15 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="250dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical">
 
@@ -65,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:hint="Masukan Nama"
+                        android:hint="Masukan Nama lengkap"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
@@ -90,13 +92,13 @@
                     app:hintTextColor="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputNip"
+                        android:id="@+id/inputEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:hint="Masukan Nip"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|number"
+                        android:hint="Email"
+                        android:imeOptions="actionDone"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/black"
@@ -137,6 +139,37 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/black"
+                    app:hintTextColor="@color/black"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/black">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="Confirm Password"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 <!--                <TextView-->
 <!--                    android:id="@+id/tvForgotPassword"-->
 <!--                    android:layout_width="wrap_content"-->
@@ -151,7 +184,7 @@
 
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSignUp"
+                    android:id="@+id/btnSignIn"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -160,7 +193,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginEnd="40dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/red"
+                    android:backgroundTint="@color/red"
                     android:text="Daftar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

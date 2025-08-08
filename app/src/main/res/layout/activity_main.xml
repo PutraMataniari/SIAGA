@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/bendera">
 
     <!-- Tombol Logout -->
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageLogout"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:id="@+id/imageProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_logout"
-        app:tint="@color/black" />
+        app:srcCompat="@drawable/profile"
+        app:tint="@color/white" />
 
     <!-- Header -->
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Aplikasi SIAGA"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="24sp"
             android:fontFamily="@font/poppins_bold" />
 
@@ -66,7 +66,7 @@
             android:layout_marginEnd="20dp"
             android:gravity="center"
             android:text="Absensi membutuhkan info lokasi dan hanya bisa dilakukan jika kamu Foto Selfie."
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:fontFamily="@font/poppins_medium"/>
 
@@ -85,7 +85,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:text="Absen Masuk: 08:00"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins_medium" />
 
@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:text="Absen Pulang: 17:00"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins_medium" />
         </androidx.appcompat.widget.LinearLayoutCompat>

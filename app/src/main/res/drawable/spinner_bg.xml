@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background saat spinner normal -->
+    <item android:state_pressed="false" android:state_focused="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" /> <!-- Warna latar belakang -->
+            <stroke
+                android:width="1dp"
+                android:color="@color/holo_red_light" /> <!-- Garis tepi -->
+            <corners android:radius="10dp" /> <!-- Sudut melengkung -->
+        </shape>
+    </item>
+
+    <!-- Background saat spinner ditekan -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F5" /> <!-- Warna latar belakang saat ditekan -->
+            <stroke
+                android:width="1dp"
+                android:color="@color/holo_red_light" /> <!-- Garis tepi -->
+            <corners android:radius="10dp" /> <!-- Sudut melengkung -->
+        </shape>
+    </item>
+
+    <!-- Background saat spinner difokuskan -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F5" /> <!-- Warna latar belakang saat difokuskan -->
+            <stroke
+                android:width="1dp"
+                android:color="@color/holo_red_light" /> <!-- Garis tepi -->
+            <corners android:radius="10dp" /> <!-- Sudut melengkung -->
+        </shape>
+    </item>
+</selector>

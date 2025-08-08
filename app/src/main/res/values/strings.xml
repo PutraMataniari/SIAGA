@@ -6,6 +6,14 @@
     <string name="ambil_foto_selfie">Ambil Foto Selfie</string>
     <string name="password">Password</string>
     <string name="masukan_nama">Masukan Nama</string>
+    <string name="masukkan_email">Masukkan Email</string>
     <string name="masukan_nip">Masukan NIP</string>
     <string name="welcome_to_siaga">Welcome to SIAGA</string>
+    <string name="Selamat_Datang_Di_siaga">Selamat Datang Di SIAGA</string>
+
+    <string-array name="jenis_keterangan">
+        <item>Cuti</item>
+        <item>Dinas</item>
+        <item>Sakit</item>
+    </string-array>
 </resources>

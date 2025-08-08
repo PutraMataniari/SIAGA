@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20sp"
-                android:text="@string/welcome_to_siaga"
+                android:text="@string/Selamat_Datang_Di_siaga"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="22sp"
@@ -65,11 +65,11 @@
                         app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputNama"
+                            android:id="@+id/inputEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:hint="@string/masukan_nama"
+                            android:hint="@string/masukkan_email"
                             android:imeOptions="actionNext"
                             android:inputType="text"
                             android:maxLines="1"
@@ -81,34 +81,34 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        app:boxCornerRadiusBottomEnd="20dp"
-                        app:boxCornerRadiusBottomStart="20dp"
-                        app:boxCornerRadiusTopEnd="20dp"
-                        app:boxCornerRadiusTopStart="20dp"
-                        app:boxStrokeColor="@color/black"
-                        app:hintTextColor="@color/black">
+<!--                    <com.google.android.material.textfield.TextInputLayout-->
+<!--                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="30dp"-->
+<!--                        app:boxCornerRadiusBottomEnd="20dp"-->
+<!--                        app:boxCornerRadiusBottomStart="20dp"-->
+<!--                        app:boxCornerRadiusTopEnd="20dp"-->
+<!--                        app:boxCornerRadiusTopStart="20dp"-->
+<!--                        app:boxStrokeColor="@color/black"-->
+<!--                        app:hintTextColor="@color/black">-->
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputNip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:hint="@string/masukan_nip"
-                            android:imeOptions="actionNext"
-                            android:inputType="text|number"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/black"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/poppins_medium"/>
+<!--                        <com.google.android.material.textfield.TextInputEditText-->
+<!--                            android:id="@+id/inputNip"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:hint="@string/masukan_nip"-->
+<!--                            android:imeOptions="actionNext"-->
+<!--                            android:inputType="text|number"-->
+<!--                            android:maxLines="1"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textColorHint="@color/black"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:fontFamily="@font/poppins_medium"/>-->
 
-                    </com.google.android.material.textfield.TextInputLayout>
+<!--                    </com.google.android.material.textfield.TextInputLayout>-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -142,17 +142,17 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <!--                    <TextView-->
-                    <!--                        android:id="@+id/tvSignUp"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_gravity="end"-->
-                    <!--                        android:layout_marginTop="10dp"-->
-                    <!--                        android:layout_marginEnd="10dp"-->
-                    <!--                        android:text="Belum Punya Akun?"-->
-                    <!--                        android:textColor="@android:color/holo_red_light"-->
-                    <!--                        android:textSize="14sp"-->
-                    <!--                        android:textStyle="bold" />-->
+                                        <TextView
+                                            android:id="@+id/tvSignUp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="end"
+                                            android:layout_marginTop="15dp"
+                                            android:layout_marginEnd="10dp"
+                                            android:text="Belum Punya Akun?"
+                                            android:textColor="@android:color/holo_red_light"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
 
 
                     <com.google.android.material.button.MaterialButton

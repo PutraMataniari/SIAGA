@@ -3,43 +3,52 @@ package com.example.siaga.view.history
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.IOException
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.siaga.api.ApiClient
+import com.example.siaga.api.ApiService
 import com.example.siaga.databinding.ActivityHistoryBinding
-import com.example.siaga.view.model.ModelDatabase
-import com.example.siaga.view.viewmodel.HistoryViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.siaga.view.adapter.HistoryAdapter
+import com.example.siaga.view.model.HistoryResponse
+import com.example.siaga.datastore.DataStoreManager
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
+import retrofit2.Response
+import retrofit2.HttpException
 
-@AndroidEntryPoint
-class HistoryActivity : AppCompatActivity(), HistoryAdapterCallback {
+class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryBinding
-    private val historyViewModel: HistoryViewModel by viewModels()
+    private lateinit var apiService: ApiService
     private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var dataStoreManager: DataStoreManager
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        apiService = ApiClient.apiService
+        dataStoreManager = DataStoreManager(this) // Inisialisasi
+
         setupToolbar()
         setupRecyclerView()
-        setupObservers()
+        loadHistoryData()
     }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.apply {
+        supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
     }
 
     private fun setupRecyclerView() {
-        historyAdapter = HistoryAdapter(this, this)
+        historyAdapter = HistoryAdapter(mutableListOf())
         binding.rvHistory.apply {
             layoutManager = LinearLayoutManager(this@HistoryActivity)
             adapter = historyAdapter
@@ -47,13 +56,46 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapterCallback {
         }
     }
 
-    private fun setupObservers() {
-        historyViewModel.dataLaporan.observe(this) { dataList ->
-            if (dataList.isEmpty()) {
-                showEmptyState()
-            } else {
-                hideEmptyState()
-                historyAdapter.setData(dataList)
+    private fun loadHistoryData() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvHistory.visibility = View.GONE
+        binding.tvNotFound.visibility = View.GONE
+
+        scope.launch {
+            try {
+                val token = dataStoreManager.tokenFlow.first()
+
+                if (token.isNullOrEmpty()) {
+                    showError("Token tidak ditemukan. Silakan login ulang.")
+                    return@launch
+                }
+
+                val response = withContext(Dispatchers.IO) {
+                    try {
+                        apiService.getAllHistory("Bearer $token").execute()
+                    } catch (e: IOException) {
+                        throw e
+                    } catch (e: Exception) {
+                        throw RuntimeException ("Unexpected error: ${e.message}")
+                    }
+                }
+
+                binding.progressBar.visibility = View.GONE
+
+                if (response.isSuccessful && response.body() != null) {
+                    val dataList = response.body()!!
+                    if (dataList.isEmpty()) {
+                        showEmptyState()
+                    } else {
+                        hideEmptyState()
+                        historyAdapter.setData(dataList)
+                    }
+                } else {
+                    showError("Gagal memuat data: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                binding.progressBar.visibility = View.GONE
+                showError("Kesalahan jaringan: ${e.message}")
             }
         }
     }
@@ -68,16 +110,9 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapterCallback {
         binding.rvHistory.visibility = View.VISIBLE
     }
 
-    override fun onDelete(modelDatabase: ModelDatabase) {
-        AlertDialog.Builder(this)
-            .setMessage("Hapus riwayat ini?")
-            .setPositiveButton("Ya, Hapus") { _, _ ->
-                historyViewModel.deleteDataById(modelDatabase.uid)
-                Toast.makeText(this, "Data berhasil dihapus", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Batal", null)
-            .create()
-            .show()
+    private fun showError(message: String) {
+        binding.tvNotFound.text = message
+        showEmptyState()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -86,5 +121,10 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapterCallback {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }
