@@ -30,6 +30,21 @@ data class User(
     val email: String
 )
 
+// ===================
+// Request Signup
+// ===================
+data class SignupRequest(
+    val name: String,
+    val email: String,
+    val password: String,
+    val password_confirmation: String
+)
+
+data class ApiResponse(
+    val status: Boolean,
+    val message: String
+)
+
 // Request body untuk absen
 data class AbsenRequest(
     val nama: String,
@@ -48,6 +63,12 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<LoginResponse>
+
+    // ================= SIGNUP =================
+    @POST("register")
+    fun signup(
+        @Body request: SignupRequest
+    ): Call<ApiResponse>
 
     // Absen masuk (dengan header token)
     @POST("absen/masuk")
