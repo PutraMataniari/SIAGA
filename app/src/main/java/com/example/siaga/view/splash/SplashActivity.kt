@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.siaga.databinding.ActivitySplashBinding
 import com.example.siaga.view.login.LoginActivity
+import com.example.siaga.view.profil.ProfilActivity
 
 class SplashActivity : AppCompatActivity () {//Class utama untuk splash
 
@@ -20,7 +21,7 @@ class SplashActivity : AppCompatActivity () {//Class utama untuk splash
     //Runnable yang akan dijalankan setelah delay
     private val splashRunnable = Runnable {
         //Pindah ke LoginActivity setelah splash selesai
-        val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+        val intent = Intent(this@SplashActivity, ProfilActivity::class.java)
         startActivity(intent)
         finish() //Tutup splash activity agar tidak bisa kembali
     }

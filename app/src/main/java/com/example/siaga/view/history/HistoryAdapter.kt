@@ -29,10 +29,10 @@ class HistoryAdapter(
         with(holder.binding) {
             tvNomor.text = data.id.toString()
             tvNama.text = data.nama
-            tvNIP.text = data.jenis
+            tvLaporan.text = data.keterangan
             tvLokasi.text = data.lokasi
             tvAbsenTime.text = data.waktuabsen
-            tvStatusAbsen.text = data.keterangan
+            tvStatusAbsen.text = data.jenis
 
             // ✅ Gunakan holder.itemView.context sebagai context untuk Glide
             try {
@@ -55,7 +55,7 @@ class HistoryAdapter(
 
             val color = when (data.keterangan) {
                 "Absen Masuk" -> Color.GREEN
-                "Absen Keluar" -> Color.RED
+                "Absen Pulang" -> Color.RED
                 "Izin" -> Color.BLUE
                 else -> Color.GRAY
             }
