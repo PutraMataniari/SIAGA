@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity () {//Class utama untuk splash
     //Runnable yang akan dijalankan setelah delay
     private val splashRunnable = Runnable {
         //Pindah ke LoginActivity setelah splash selesai
-        val intent = Intent(this@SplashActivity, ProfilActivity::class.java)
+        val intent = Intent(this@SplashActivity, LoginActivity::class.java)
         startActivity(intent)
         finish() //Tutup splash activity agar tidak bisa kembali
     }

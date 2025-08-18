@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="10dp">
+                app:cardElevation="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -80,10 +80,10 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
+                            android:fontFamily="@font/poppins_semibold"
                             android:text="Absen harus Foto Selfie ya!"
                             android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/poppins_semibold"/>
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -100,10 +100,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/poppins_semibold"
                             android:text="Ambil Foto Selfie"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/poppins_semibold" />
+                            android:textSize="16sp" />
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -133,56 +133,55 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nama"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Nama Anda"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold" />
+                            android:textSize="14sp" />
 
                         <EditText
                             android:id="@+id/inputNama"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
-                            android:hint="Masukan Nama Anda"
+                            android:fontFamily="@font/poppins_regular"
+                            android:hint="Masukan nama Anda"
                             android:imeOptions="actionNext"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
                     </LinearLayout>
 
-<!--                                        <LinearLayout-->
-<!--                                            android:layout_width="match_parent"-->
-<!--                                            android:layout_height="wrap_content"-->
-<!--                                            android:layout_marginStart="20dp"-->
-<!--                                            android:layout_marginTop="20dp"-->
-<!--                                            android:layout_marginEnd="20dp"-->
-<!--                                            android:orientation="vertical">-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="20dp"-->
+                    <!--                        android:layout_marginTop="20dp"-->
+                    <!--                        android:layout_marginEnd="20dp"-->
+                    <!--                        android:orientation="vertical">-->
 
-<!--                                            <TextView-->
-<!--                                                android:layout_width="wrap_content"-->
-<!--                                                android:layout_height="wrap_content"-->
-<!--                                                android:text="NIP"-->
-<!--                                                android:textColor="@color/black"-->
-<!--                                                android:textSize="14sp"-->
-<!--                                                android:fontFamily="@font/poppins_semibold" />-->
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="NIP Anda"-->
+                    <!--                            android:textColor="@color/black"-->
+                    <!--                            android:textSize="14sp"-->
+                    <!--                            android:textStyle="bold" />-->
 
-<!--                                            <EditText-->
-<!--                                                android:id="@+id/inputNip"-->
-<!--                                                android:layout_width="match_parent"-->
-<!--                                                android:layout_height="50dp"-->
-<!--                                                android:backgroundTint="@android:color/holo_red_light"-->
-<!--                                                android:hint="Masukan NIP Anda"-->
-<!--                                                android:imeOptions="actionNext"-->
-<!--                                                android:maxLines="1"-->
-<!--                                                android:singleLine="true"-->
-<!--                                                android:textColor="@color/black"-->
-<!--                                                android:textSize="12sp"-->
-<!--                                                android:fontFamily="@font/poppins_regular"/>-->
+                    <!--                        <EditText-->
+                    <!--                            android:id="@+id/inputNip"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="50dp"-->
+                    <!--                            android:backgroundTint="@android:color/holo_red_light"-->
+                    <!--                            android:hint="Masukan NIP Anda"-->
+                    <!--                            android:imeOptions="actionNext"-->
+                    <!--                            android:maxLines="1"-->
+                    <!--                            android:singleLine="true"-->
+                    <!--                            android:textColor="@color/black"-->
+                    <!--                            android:textSize="16sp" />-->
 
-<!--                                        </LinearLayout>-->
+                    <!--                    </LinearLayout>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -195,10 +194,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
                             android:text="Tanggal &amp; Waktu"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold" />
+                            android:textSize="14sp" />
 
                         <EditText
                             android:id="@+id/inputTanggal"
@@ -206,13 +205,13 @@
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
                             android:focusableInTouchMode="false"
+                            android:fontFamily="@font/poppins_regular"
                             android:hint="Masukan tanggal dan waktu"
                             android:imeOptions="actionNext"
                             android:inputType="date"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/poppins_regular"/>
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -227,10 +226,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
                             android:text="Lokasi"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold" />
+                            android:textSize="14sp" />
 
                         <EditText
                             android:id="@+id/inputLokasi"
@@ -238,13 +237,13 @@
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
                             android:focusableInTouchMode="false"
+                            android:fontFamily="@font/poppins_regular"
                             android:hint="Masukan lokasi"
                             android:imeOptions="actionNext"
                             android:inputType="date"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/poppins_regular"/>
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -255,122 +254,31 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/Laporan_harian"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
                             android:text="Laporan Harian"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold"/>
+                            android:textSize="14sp" />
 
                         <EditText
                             android:id="@+id/inputlaporan"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
+                            android:fontFamily="@font/poppins_regular"
                             android:hint="Masukan Laporan Harian"
                             android:imeOptions="actionDone"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/poppins_regular"/>
-
-                    </LinearLayout>
-
-<!--                    &lt;!&ndash; Jenis Izin (untuk Absen Izin) &ndash;&gt;-->
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/layoutJenisIzin"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_margin="20dp"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:visibility="gone">-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Jenis Perizinan"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:fontFamily="@font/poppins_semibold"/>-->
-<!--                        <Spinner-->
-<!--                            android:id="@+id/spinnerJenisIzin"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:background="@drawable/spinner_bg"-->
-<!--                            android:padding="10dp" />-->
-<!--                    </LinearLayout>-->
-
-                    <!-- Lampiran File/Surat (untuk Izin) -->
-                    <LinearLayout
-                        android:id="@+id/layoutLampiran"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical">
-<!--                        android:visibility="gone">-->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lampiran (Surat Sakit/Izin)"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold"/>
-                        <Button
-                            android:id="@+id/btnUploadLampiran"
-                            android:layout_width="200dp"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@android:color/holo_red_light"
-                            android:text="Pilih File atau Foto"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_regular"/>
-                        <TextView
-                            android:id="@+id/textLampiran"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Belum ada file terpilih"
-                            android:textColor="@color/gray"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Keterangan"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/poppins_semibold"/>
-                        <Spinner
-                            android:id="@+id/spinnerJenisKeterangan"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/spinner_bg"
-                            android:padding="10dp" />
-
-<!--                        <EditText-->
-<!--                            android:id="@+id/inputKeterangan"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:backgroundTint="@android:color/holo_red_light"-->
-<!--                            android:hint="Masukan Keterangan"-->
-<!--                            android:imeOptions="actionDone"-->
-<!--                            android:maxLines="1"-->
-<!--                            android:singleLine="true"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="12sp"-->
-<!--                            android:fontFamily="@font/poppins_regular"/>-->
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
+
 
             </androidx.cardview.widget.CardView>
 
@@ -385,16 +293,18 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/holo_red_light"
-                android:background="@drawable/rounded_button"
-                android:text="Masuk"
+                android:text="Input Absen"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:fontFamily="@font/poppins_semibold"
                 app:cornerRadius="20dp"
                 app:elevation="5dp" />
 
+
         </LinearLayout>
+
+
 
     </androidx.core.widget.NestedScrollView>
 

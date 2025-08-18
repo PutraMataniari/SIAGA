@@ -3,11 +3,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:shape="rectangle"
         tools:ignore="ExtraText">
-        <solid android:color="#FF0000" /> <!-- Warna latar belakang tombol -->
+        <solid android:color="#FF4444" /> <!-- Warna latar belakang tombol -->
         <corners
-            android:topLeftRadius="20dp"
-            android:bottomLeftRadius="20dp"
-            android:topRightRadius="20dp"
-            android:bottomRightRadius="20dp"
+            android:topLeftRadius="40dp"
+            android:bottomLeftRadius="40dp"
+            android:topRightRadius="40dp"
+            android:bottomRightRadius="40dp"
         />
     </shape>

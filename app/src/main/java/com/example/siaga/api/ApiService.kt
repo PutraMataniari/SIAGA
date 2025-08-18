@@ -50,8 +50,10 @@ data class AbsenRequest(
     val nama: String,
     val tanggal: String,
     val lokasi: String,
-    val keterangan: String,
-    val gambar: String // base64
+    val gambar: String,
+    val keterangan: String? = null,
+    val laporanHarian: String? = null,
+    val lampiran: String? = null // untuk perizinan
 )
 
 interface ApiService {

@@ -7,7 +7,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.siaga.databinding.ActivityMainBinding
 import com.example.siaga.datastore.DataStoreManager
-import com.example.siaga.view.absen.AbsenActivity
+import com.example.siaga.view.absen.AbsenPerizinanActivity
+import com.example.siaga.view.absen.AbsenMasukActivity
+import com.example.siaga.view.absen.AbsenPulangActivity
 import com.example.siaga.view.history.HistoryActivity
 import com.example.siaga.view.profil.ProfilActivity
 import kotlinx.coroutines.CoroutineScope
@@ -43,20 +45,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun setInitLayout() {
         binding.cvAbsenMasuk.setOnClickListener {
-            val intent = Intent(this, AbsenActivity::class.java)
-            intent.putExtra(AbsenActivity.DATA_TITLE, "Absen Masuk")
+            val intent = Intent(this, AbsenMasukActivity::class.java)
+            intent.putExtra(AbsenMasukActivity.DATA_TITLE, "Absen Masuk")
             startActivity(intent)
         }
 
         binding.cvAbsenKeluar.setOnClickListener {
-            val intent = Intent(this, AbsenActivity::class.java)
-            intent.putExtra(AbsenActivity.DATA_TITLE, "Absen Pulang")
+            val intent = Intent(this, AbsenPulangActivity::class.java)
+            intent.putExtra(AbsenPulangActivity.DATA_TITLE, "Absen Pulang")
             startActivity(intent)
         }
 
         binding.cvPerizinan.setOnClickListener {
-            val intent = Intent(this, AbsenActivity::class.java)
-            intent.putExtra(AbsenActivity.DATA_TITLE, "Izin")
+            val intent = Intent(this, AbsenPerizinanActivity::class.java)
+            intent.putExtra(AbsenPerizinanActivity.DATA_TITLE, "Izin")
             startActivity(intent)
         }
 
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Setup logout button with confirmation dialog
+     * Setup profile button with confirmation dialog
      */
     private fun setupProfile() {
         binding.imageProfile.setOnClickListener {

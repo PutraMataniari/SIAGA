@@ -148,7 +148,7 @@
                         android:layout_weight="1"
                         android:text="Absen Masuk"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_semibold" />
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
@@ -200,7 +200,7 @@
                         android:layout_weight="1"
                         android:text="Absen Pulang"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_semibold" />
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
@@ -252,7 +252,7 @@
                         android:layout_weight="1"
                         android:text="Perizinan"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_semibold" />
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
@@ -304,7 +304,7 @@
                         android:layout_weight="1"
                         android:text="Riwayat\ Absen Anda"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_semibold" />
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="30dp"
