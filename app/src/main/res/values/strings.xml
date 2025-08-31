@@ -10,6 +10,7 @@
     <string name="masukan_nip">Masukan NIP</string>
     <string name="welcome_to_siaga">Welcome to SIAGA</string>
     <string name="Selamat_Datang_Di_siaga">Selamat Datang Di SIAGA</string>
+    <string name="dropdown">dropdown</string>
 
     <string-array name="jenis_keterangan">
         <item>Cuti</item>

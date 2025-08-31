@@ -30,14 +30,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- Judul Aplikasi -->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Aplikasi SIAGA"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:fontFamily="@font/poppins_bold" />
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="Aplikasi SIAGA"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="24sp"-->
+<!--            android:fontFamily="@font/poppins_bold" />-->
 
         <!-- Logo KPU -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,36 +71,36 @@
             android:fontFamily="@font/poppins_medium"/>
 
         <!-- Informasi Waktu Absen -->
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center">
+<!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:gravity="center">-->
 
-            <!-- Jam Absen Masuk -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:text="Absen Masuk: 08:00"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:fontFamily="@font/poppins_medium" />
+<!--            &lt;!&ndash; Jam Absen Masuk &ndash;&gt;-->
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="Absen Masuk: 08:00"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="14sp"-->
+<!--                android:fontFamily="@font/poppins_medium" />-->
 
-            <!-- Jam Absen Pulang -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:text="Absen Pulang: 17:00"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:fontFamily="@font/poppins_medium" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+<!--            &lt;!&ndash; Jam Absen Pulang &ndash;&gt;-->
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="Absen Pulang: 17:00"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="14sp"-->
+<!--                android:fontFamily="@font/poppins_medium" />-->
+<!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- Scrollable Content -->

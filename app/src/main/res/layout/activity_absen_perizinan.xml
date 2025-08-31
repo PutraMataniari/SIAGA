@@ -255,19 +255,52 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/Keterangan"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Keterangan"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:fontFamily="@font/poppins_semibold"/>
-                        <Spinner
-                            android:id="@+id/spinnerJenisKeterangan"
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/keteranganLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/spinner_bg"
-                            android:padding="10dp" />
+                            android:layout_height="wrap_content"
+                            app:endIconMode="dropdown_menu">
+
+                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                android:id="@+id/inputketerangan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textColor="@color/black"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:backgroundTint="@android:color/transparent"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/Keterangan"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Keterangan"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:fontFamily="@font/poppins_semibold"-->
+<!--                            app:endIconMode="dropdown_menu"/>-->
+
+<!--                        <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
+<!--                            android:id="@+id/inputketerangan"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="65dp"-->
+<!--                            android:imeOptions="actionNext"-->
+<!--                            android:inputType="none"-->
+<!--                            android:paddingStart="20dp"-->
+<!--                            android:maxLines="1"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="16sp"-->
+<!--                            android:fontFamily="@font/poppins_medium"/>-->
 
                     </LinearLayout>
 
@@ -281,7 +314,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lampiran (Surat Sakit/Izin)"
+                            android:text="Lampiran (Surat Dinas/Cuti)"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:fontFamily="@font/poppins_semibold"/>
@@ -302,6 +335,7 @@
                             android:layout_marginTop="8dp"
                             android:text="Belum ada file terpilih"
                             android:textColor="@color/gray"
+                            android:fontFamily="@font/poppins_regular"
                             android:textSize="12sp"/>
                     </LinearLayout>
 

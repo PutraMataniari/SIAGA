@@ -47,20 +47,20 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:cardCornerRadius="10dp"
+                    android:padding="20dp"
+                    android:layout_margin="10dp"
                     app:cardElevation="10dp">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -92,6 +92,7 @@
                             android:layout_height="wrap_content"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
                             app:boxCornerRadiusTopStart="20dp"
                             app:boxStrokeColor="@color/black"
@@ -109,7 +110,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -126,6 +127,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -145,7 +147,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -161,6 +163,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -180,7 +183,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -196,6 +199,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -215,7 +219,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -231,6 +235,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -251,7 +256,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -265,31 +270,62 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:id="@+id/layoutJabatan"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="Jabatan"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
                             app:boxCornerRadiusTopStart="20dp"
+                            app:endIconMode="dropdown_menu"
                             app:boxStrokeColor="@color/black"
-                            app:hintTextColor="@color/black">
+                            app:hintTextColor="@color/black"
+                            app:boxBackgroundMode="outline">
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                                 android:id="@+id/inputJabatan"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:hint="Jabatan"
+                                android:layout_height="65dp"
                                 android:imeOptions="actionNext"
-                                android:inputType="text"
+                                android:inputType="none"
+                                android:paddingStart="20dp"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/black"
-                                android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
-
                         </com.google.android.material.textfield.TextInputLayout>
+
+<!--                        <com.google.android.material.textfield.TextInputLayout-->
+<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="20dp"-->
+<!--                            app:boxCornerRadiusBottomEnd="20dp"-->
+<!--                            app:boxCornerRadiusBottomStart="20dp"-->
+<!--                            app:boxCornerRadiusTopEnd="20dp"-->
+<!--                            app:boxCornerRadiusTopStart="20dp"-->
+<!--                            app:boxStrokeColor="@color/black"-->
+<!--                            app:hintTextColor="@color/black">-->
+
+<!--                            <com.google.android.material.textfield.TextInputEditText-->
+<!--                                android:id="@+id/inputJabatan"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:hint="Jabatan"-->
+<!--                                android:imeOptions="actionNext"-->
+<!--                                android:inputType="text"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:singleLine="true"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textColorHint="@color/black"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:fontFamily="@font/poppins_medium"/>-->
+
+<!--                        </com.google.android.material.textfield.TextInputLayout>-->
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -300,31 +336,80 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:id="@+id/layoutBagian"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="Bagian"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
                             app:boxCornerRadiusTopStart="20dp"
+                            app:endIconMode="dropdown_menu"
                             app:boxStrokeColor="@color/black"
-                            app:hintTextColor="@color/black">
+                            app:hintTextColor="@color/black"
+                            app:boxBackgroundMode="outline">
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                                 android:id="@+id/inputBagian"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:hint="Bagian"
+                                android:layout_height="65dp"
                                 android:imeOptions="actionNext"
-                                android:inputType="text"
+                                android:inputType="none"
+                                android:paddingStart="20dp"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/black"
-                                android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
-
                         </com.google.android.material.textfield.TextInputLayout>
+
+<!--                        <com.google.android.material.textfield.TextInputLayout-->
+<!--                            android:id="@+id/layoutBagian"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:hint="Bagian"-->
+<!--                            android:layout_margin="20dp"-->
+<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                            app:endIconMode="dropdown_menu">-->
+
+<!--                            <AutoCompleteTextView-->
+<!--                                android:id="@+id/inputBagian"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:inputType="none"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="14sp" />-->
+<!--                        </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--                        <com.google.android.material.textfield.TextInputLayout-->
+<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="20dp"-->
+<!--                            app:boxCornerRadiusBottomEnd="20dp"-->
+<!--                            app:boxCornerRadiusBottomStart="20dp"-->
+<!--                            app:boxCornerRadiusTopEnd="20dp"-->
+<!--                            app:boxCornerRadiusTopStart="20dp"-->
+<!--                            app:boxStrokeColor="@color/black"-->
+<!--                            app:hintTextColor="@color/black">-->
+
+<!--                            <com.google.android.material.textfield.TextInputEditText-->
+<!--                                android:id="@+id/inputBagian"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:hint="Bagian"-->
+<!--                                android:imeOptions="actionNext"-->
+<!--                                android:inputType="text"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:singleLine="true"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textColorHint="@color/black"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:fontFamily="@font/poppins_medium"/>-->
+
+<!--                        </com.google.android.material.textfield.TextInputLayout>-->
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -337,6 +422,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -356,7 +442,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -372,6 +458,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
@@ -393,7 +480,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/poppins_medium"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -409,6 +496,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
                         app:boxCornerRadiusTopEnd="20dp"
@@ -430,7 +518,7 @@
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:fontFamily="@font/poppins_medium"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -444,14 +532,14 @@
                         android:layout_height="60dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="1180dp"
+                        android:layout_marginTop="1190dp"
                         android:layout_marginEnd="40dp"
                         android:layout_marginBottom="20dp"
                         android:backgroundTint="@color/red"
                         android:text="Daftar"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="22dp"
+                        android:textSize="22sp"
                         android:fontFamily="@font/poppins_semibold"
                         app:cornerRadius="20dp"
                         app:elevation="5dp" />

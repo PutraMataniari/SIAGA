@@ -7,9 +7,11 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.siaga.R
 import com.example.siaga.api.ApiClient
 import com.example.siaga.api.ApiResponse
 import com.example.siaga.api.SignupRequest
@@ -49,6 +51,30 @@ class SignUpActivity : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener {
             registerUser()
         }
+
+        //Dropdown Jabatan
+        val jabatannList = listOf(
+            "Kabag",
+            "Kasubag",
+            "Pelaksana"
+        )
+
+        val jabatanAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, jabatannList)
+        binding.inputJabatan.setAdapter(jabatanAdapter)
+
+        //Dropdown Bagian
+        val bagianList = listOf(
+                "Keuangan, Umum, Logistik",
+                "Teknis Penyelenggaraan Pemilu, ParHumas",
+                "Perencanaan, Data dan Informasi",
+                "Hukum dan Sumber Daya Manusia"
+        )
+
+        val bagianAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, bagianList)
+        binding.inputBagian.setAdapter(bagianAdapter)
+
+
+
     }
 
     private fun showImagePickerDialog() {

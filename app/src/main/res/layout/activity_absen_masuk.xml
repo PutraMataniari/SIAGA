@@ -80,7 +80,7 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
-                            android:text="Absen harus Foto Selfie ya!"
+                            android:text="Absen harus Foto Selfie!"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:fontFamily="@font/poppins_semibold"/>

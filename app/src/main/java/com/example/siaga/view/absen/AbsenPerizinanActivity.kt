@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -119,6 +120,8 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         dataStoreManager = DataStoreManager(this)
         fetchToken()
 
+        setupKeteranganDropdown()
+
         setInitLayout()
 
         // ✅ Cek & minta izin di awal
@@ -131,6 +134,11 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         )
 
         setUploadData()
+
+        //Dropdown Keterangan
+        val keteranganList = listOf("Cuti", "Dinas", "Sakit")
+        val keteranganAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, keteranganList)
+        binding.inputketerangan.setAdapter(keteranganAdapter)
     }
 
     private fun fetchToken() {
@@ -262,6 +270,25 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupKeteranganDropdown() {
+        val keteranganList = listOf("Cuti", "Dinas", "Sakit")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, keteranganList)
+        binding.inputketerangan.setAdapter(adapter)
+
+        // Agar user tidak bisa ketik manual
+        binding.inputketerangan.keyListener = null
+    }
+
+//    private fun setupSubmitButton() {
+//        binding.inputketerangan.setOnClickListener {
+//            if (binding.inputketerangan.text.isNullOrEmpty()) {
+//                binding.keteranganLayout.error = "Keterangan wajib dipilih"
+//            } else {
+//                binding.keteranganLayout.error = null
+//                // lanjut proses submit
+//            }
+//        }
+//    }
 
     private fun setUploadData() {
         binding.btnAbsen.setOnClickListener {
