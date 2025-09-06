@@ -3,6 +3,7 @@ package com.example.siaga.view.absen
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,6 +16,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -27,12 +29,21 @@ import com.example.siaga.api.ApiClient
 import com.example.siaga.api.AbsenRequest
 import com.example.siaga.datastore.DataStoreManager
 import com.example.siaga.databinding.ActivityAbsenMasukBinding
+import com.example.siaga.model.AbsensiResponse
+import com.example.siaga.model.RegisterResponse
+import com.example.siaga.view.login.LoginActivity
 import com.example.siaga.view.model.HistoryResponse
+import com.example.siaga.view.signup.SignUpActivity
 import com.example.siaga.view.utils.BitmapManager.bitmapToBase64
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +51,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.toString
 
 class AbsenMasukActivity : AppCompatActivity() {
 
@@ -59,6 +71,7 @@ class AbsenMasukActivity : AppCompatActivity() {
     private lateinit var dataStoreManager: DataStoreManager
 
     private var userToken: String? = null
+    private var userNama: String? = null
 
     // === Helpers permission
     private fun hasCameraPermission(): Boolean =
@@ -120,14 +133,19 @@ class AbsenMasukActivity : AppCompatActivity() {
 
     private fun fetchToken() {
         lifecycleScope.launch {
-            dataStoreManager.tokenFlow.collect { token ->
-                userToken = token
-                if (token == null) {
+            val user = DataStoreManager(this@AbsenMasukActivity).getUserData()
+            user?.let {
+                Log.d("USER_DATA", "Token: ${it.token}, Name: ${it.name}, Email: ${it.email}")
+                userToken = it.token
+                userNama = it.name
+                findViewById<TextView>(R.id.inputNama).text = it.name
+                if (it.token == null) {
                     Toast.makeText(this@AbsenMasukActivity, "Anda belum login!", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
         }
+
     }
 
     // === Lokasi ===
@@ -244,7 +262,7 @@ class AbsenMasukActivity : AppCompatActivity() {
             val strNama = binding.inputNama.text.toString()
             val strTanggal = binding.inputTanggal.text.toString()
 
-            if (strNama.isEmpty() || strTanggal.isEmpty() || strCurrentLocation.isEmpty() || strBase64Photo.isEmpty()) {
+            if (strNama.isEmpty() || strTanggal.isEmpty()) {
                 Toast.makeText(this, "Semua data harus diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -255,36 +273,73 @@ class AbsenMasukActivity : AppCompatActivity() {
             }
 
             val token = "Bearer $userToken"
-            val req = AbsenRequest(
-                nama = strNama,
-                tanggal = strTanggal,
-                lokasi = strCurrentLocation,
-                gambar = strBase64Photo
-            )
-            sendAbsenToApi(token, req)
+            sendAbsenToApi(token)
         }
     }
 
-    private fun sendAbsenToApi(token: String, request: AbsenRequest) {
-        ApiClient.apiService.absenMasuk(token, request)
-            .enqueue(object : Callback<HistoryResponse> {
-                override fun onResponse(
-                    call: Call<HistoryResponse>,
-                    response: Response<HistoryResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@AbsenMasukActivity, "Absen berhasil dikirim!", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this@AbsenMasukActivity, "Gagal: ${response.message()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<HistoryResponse>, t: Throwable) {
-                    Toast.makeText(this@AbsenMasukActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+    private fun uriToFile(uri: Uri): File? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val tempFile = File.createTempFile("profile_", ".jpg", cacheDir)
+            tempFile.outputStream().use { fileOut ->
+                inputStream?.copyTo(fileOut)
+            }
+            tempFile
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
     }
+
+    private fun sendAbsenToApi(token: String) {
+        // Ambil data dari inputan
+        val nama = binding.inputNama.text.toString().trim()
+        val lokasi = binding.inputLokasi.text.toString().trim()
+
+        if (nama.isEmpty() || lokasi.isEmpty()) {
+            Toast.makeText(this, "Semua data wajib diisi!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!::cameraUri.isInitialized) {
+            Toast.makeText(this, "Foto wajib diambil!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val namaBody = nama.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lokasiBody = lokasi.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val file = uriToFile(cameraUri)
+        if (file == null || !file.exists()) {
+            Toast.makeText(this, "File foto tidak ditemukan!", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val gambarPart = MultipartBody.Part.createFormData("gambar", file.name, reqFile)
+
+        ApiClient.instance.absenMasuk(
+            token,
+            gambarPart,
+            namaBody,
+            lokasiBody
+        ).enqueue(object : Callback<AbsensiResponse> {
+            override fun onResponse(call: Call<AbsensiResponse>, response: Response<AbsensiResponse>) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    Toast.makeText(this@AbsenMasukActivity, "Absen sukses: ${body?.message}", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@AbsenMasukActivity, LoginActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this@AbsenMasukActivity, "Error: ${response.errorBody()?.string()}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<AbsensiResponse>, t: Throwable) {
+                Toast.makeText(this@AbsenMasukActivity, "Gagal: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
 
     @Throws(IOException::class)
     private fun createImageFile(): File {

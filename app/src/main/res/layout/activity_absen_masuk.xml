@@ -143,6 +143,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
+                            android:focusableInTouchMode="false"
                             android:hint="Masukan nama Anda"
                             android:imeOptions="actionNext"
                             android:maxLines="1"

@@ -3,6 +3,7 @@ package com.example.siaga.view.history
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.IOException
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,17 @@ class HistoryActivity : AppCompatActivity() {
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        apiService = ApiClient.apiService
+        //Toolbar
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
+
+        //RecyclerView
+        historyAdapter = HistoryAdapter(mutableListOf())
+        binding.rvHistory.layoutManager = LinearLayoutManager(this)
+        binding.rvHistory.adapter = historyAdapter
+
+        apiService = ApiClient.instance
         dataStoreManager = DataStoreManager(this) // Inisialisasi
 
         setupToolbar()
@@ -76,29 +87,35 @@ class HistoryActivity : AppCompatActivity() {
                     } catch (e: IOException) {
                         throw e
                     } catch (e: Exception) {
-                        throw RuntimeException ("Unexpected error: ${e.message}")
+                        throw RuntimeException("Unexpected error: ${e.message}")
                     }
                 }
 
                 binding.progressBar.visibility = View.GONE
 
                 if (response.isSuccessful && response.body() != null) {
-                    val dataList = response.body()!!
+                    val dataList = response.body()!!.data  // ✅ ambil dari .data
+
                     if (dataList.isEmpty()) {
                         showEmptyState()
                     } else {
                         hideEmptyState()
                         historyAdapter.setData(dataList)
+                        binding.rvHistory.visibility = View.VISIBLE
                     }
                 } else {
                     showError("Gagal memuat data: ${response.message()}")
                 }
+            } catch (e: HttpException) {
+                binding.progressBar.visibility = View.GONE
+                showError("Server error: ${e.message()}")
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
                 showError("Kesalahan jaringan: ${e.message}")
             }
         }
     }
+
 
     private fun showEmptyState() {
         binding.tvNotFound.visibility = View.VISIBLE
@@ -113,6 +130,7 @@ class HistoryActivity : AppCompatActivity() {
     private fun showError(message: String) {
         binding.tvNotFound.text = message
         showEmptyState()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

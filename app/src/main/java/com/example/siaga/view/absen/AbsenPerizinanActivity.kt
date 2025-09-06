@@ -25,15 +25,19 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.siaga.R
 import com.example.siaga.api.ApiClient
-import com.example.siaga.api.AbsenRequest
 import com.example.siaga.datastore.DataStoreManager
 import com.example.siaga.databinding.ActivityAbsenPerizinanBinding
-import com.example.siaga.view.model.HistoryResponse
+import com.example.siaga.model.IzinResponse
 import com.example.siaga.view.utils.BitmapManager.bitmapToBase64
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,6 +53,7 @@ class AbsenPerizinanActivity : AppCompatActivity() {
     private var strCurrentLatitude = 0.0
     private var strCurrentLongitude = 0.0
     private var strFilePath: String = ""
+    private var strLampiranPath: String = ""
     private var strBase64Photo: String = ""
     private var strCurrentLocation: String = ""
     private var strTitle: String = ""
@@ -61,6 +66,7 @@ class AbsenPerizinanActivity : AppCompatActivity() {
     private lateinit var dataStoreManager: DataStoreManager
 
     private var userToken: String? = null
+    private var userNama: String? = null
 
     // === Helpers permission
     private fun hasCameraPermission(): Boolean =
@@ -106,11 +112,45 @@ class AbsenPerizinanActivity : AppCompatActivity() {
     private val pickFileLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                strFilePath = it.toString()
-                binding.btnUploadLampiran.text = "File terpilih"
-                binding.textLampiran.text = it.lastPathSegment ?: it.toString()
+                val file = uriToFile(it)
+                if (file != null) {
+                    strLampiranPath = file.absolutePath
+                    val fileName = getFileNameFromUri(it) ?: file.name
+                    binding.btnUploadLampiran.text = "File terpilih"
+                    binding.textLampiran.text = fileName
+                }else {
+                    Toast.makeText(this, "Gagal membaca file lampiran", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
+
+    private fun getFileNameFromUri(uri: Uri): String? {
+        var name = "lampiran_unknown"
+            val cursor = contentResolver.query(uri, null, null, null, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val idx= it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                    if (idx >= 0) name = it.getString(idx)
+                }
+            }
+        return name
+    }
+
+    private fun uriToFile(uri: Uri): File? {
+        return try{
+            val inputStream = contentResolver.openInputStream(uri)
+            val fileName = getFileNameFromUri(uri)
+            val tempFile = File(cacheDir, fileName)
+            inputStream?.use { input -> tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }}
+            tempFile
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +161,6 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         fetchToken()
 
         setupKeteranganDropdown()
-
         setInitLayout()
 
         // ✅ Cek & minta izin di awal
@@ -143,9 +182,15 @@ class AbsenPerizinanActivity : AppCompatActivity() {
 
     private fun fetchToken() {
         lifecycleScope.launch {
-            dataStoreManager.tokenFlow.collect { token ->
-                userToken = token
-                if (token == null) {
+            val user = DataStoreManager(this@AbsenPerizinanActivity).getUserData()
+            user?.let {
+                userToken =  it.token
+                userNama = it.name
+
+                binding.inputNama.setText(it.name)
+                binding.inputNama.isEnabled = false
+
+                if (it.token == null) {
                     Toast.makeText(this@AbsenPerizinanActivity, "Anda belum login!", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -258,11 +303,7 @@ class AbsenPerizinanActivity : AppCompatActivity() {
     private fun openCamera() {
         try {
             val photoFile = createImageFile()
-            cameraUri = FileProvider.getUriForFile(
-                this,
-                "${packageName}.provider",
-                photoFile
-            )
+            cameraUri = FileProvider.getUriForFile(this, "${packageName}.provider", photoFile)
             takePicture.launch(cameraUri)
         } catch (ex: Exception) {
             Toast.makeText(this, "Gagal membuka kamera: ${ex.message}", Toast.LENGTH_SHORT).show()
@@ -279,25 +320,14 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         binding.inputketerangan.keyListener = null
     }
 
-//    private fun setupSubmitButton() {
-//        binding.inputketerangan.setOnClickListener {
-//            if (binding.inputketerangan.text.isNullOrEmpty()) {
-//                binding.keteranganLayout.error = "Keterangan wajib dipilih"
-//            } else {
-//                binding.keteranganLayout.error = null
-//                // lanjut proses submit
-//            }
-//        }
-//    }
-
     private fun setUploadData() {
         binding.btnAbsen.setOnClickListener {
-            val strNama = binding.inputNama.text.toString()
-            val strTanggal = binding.inputTanggal.text.toString()
+            val strNama = binding.inputNama.text.toString().trim()
+            val strTanggal = binding.inputTanggal.text.toString().trim()
+            val strlokasi = binding.inputLokasi.text.toString().trim()
+            val strKeterangan = binding.inputketerangan.text.toString().trim()
 
-            if (strFilePath.isEmpty() || strNama.isEmpty() ||
-                strCurrentLocation.isEmpty() || strTanggal.isEmpty()
-            ) {
+            if (strNama.isEmpty() || strTanggal.isEmpty() || strlokasi.isEmpty() || strKeterangan.isEmpty()) {
                 Toast.makeText(this, "Semua data harus diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -308,32 +338,74 @@ class AbsenPerizinanActivity : AppCompatActivity() {
             }
 
             val token = "Bearer $userToken"
-            val req = AbsenRequest(
-                nama = strNama,
-                tanggal = strTanggal,
-                lokasi = strCurrentLocation,
-                gambar = strBase64Photo
-            )
-            sendAbsenToApi(token, req)
+            sendAbsenToApi(token)
         }
     }
 
-    private fun sendAbsenToApi(token: String, request: AbsenRequest) {
-        ApiClient.apiService.absenMasuk(token, request)
-            .enqueue(object : Callback<HistoryResponse> {
-                override fun onResponse(
-                    call: Call<HistoryResponse>,
-                    response: Response<HistoryResponse>
-                ) {
+    private fun sendAbsenToApi(token: String) {
+
+        val nama = binding.inputNama.text.toString().trim()
+        val lokasi = binding.inputLokasi.text.toString().trim()
+        val jenisIzin = binding.inputketerangan.text.toString().trim()
+
+        if (nama.isEmpty() || lokasi.isEmpty() || jenisIzin.isEmpty()) {
+            Toast.makeText(this, "Semua data wajib diisi!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (strFilePath.isEmpty()) {
+            Toast.makeText(this, "Foto wajib diambil!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Cek lampiran wajib
+        if (strLampiranPath.isEmpty()) {
+            Toast.makeText(this, "Lampiran wajib diisi!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val namaPart = nama.toRequestBody("text/plain".toMediaType())
+        val lokasiPart = lokasi.toRequestBody("text/plain".toMediaType())
+        val jenisIzinPart = jenisIzin.lowercase().toRequestBody("text/plain".toMediaType())
+
+        // Selfie wajib (ambil dari filePath terakhir)
+        val fileGambar = File(strFilePath)
+        val RequestGambar = fileGambar.asRequestBody("image/*".toMediaType())
+        val gambarPart = MultipartBody.Part.createFormData("gambar", fileGambar.name, RequestGambar)
+
+        // Lampiran wajib
+            val fileBukti = File(strLampiranPath)
+            val mimeTypeBukti = when {
+                strLampiranPath.endsWith("pdf") -> "application/pdf"
+                strLampiranPath.endsWith("doc") -> "application/msword"
+                strLampiranPath.endsWith("docx") -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                else -> "image/*"
+            }
+            if (!fileBukti.exists()) {
+                Toast.makeText(this, "Lampiran wajib diisi!", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val requestBukti = fileBukti.asRequestBody(mimeTypeBukti.toMediaType())
+            val buktiPart = MultipartBody.Part.createFormData("bukti", fileBukti.name, requestBukti)
+            val buktiAsliPart = fileBukti.name.toRequestBody("text/plain".toMediaType())
+
+        ApiClient.instance.Perizinan(
+            token,
+            namaPart,
+            lokasiPart,
+            jenisIzinPart,
+            gambarPart,
+            buktiPart,
+            buktiAsliPart
+            ).enqueue(object : Callback<IzinResponse> { override fun onResponse(call: Call<IzinResponse>, response: Response<IzinResponse>){
                     if (response.isSuccessful) {
-                        Toast.makeText(this@AbsenPerizinanActivity, "Absen berhasil dikirim!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AbsenPerizinanActivity, "Izin berhasil dikirim", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         Toast.makeText(this@AbsenPerizinanActivity, "Gagal: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-                override fun onFailure(call: Call<HistoryResponse>, t: Throwable) {
+                override fun onFailure(call: Call<IzinResponse>, t: Throwable) {
                     Toast.makeText(this@AbsenPerizinanActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -405,3 +477,5 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         const val DATA_TITLE = "TITLE"
     }
 }
+
+

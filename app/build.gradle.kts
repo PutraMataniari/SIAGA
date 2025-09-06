@@ -86,11 +86,16 @@ dependencies {
     implementation(libs.androidx.datastore.core.android)
 //    implementation(libs.firebase.appdistribution.gradle)
 
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
 //hdodenhof
     implementation(libs.circleimageview)
 
 //    Fragment
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.cardview)
 
     kapt(libs.hilt.compiler)
 

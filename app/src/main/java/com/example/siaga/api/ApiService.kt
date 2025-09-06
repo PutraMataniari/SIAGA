@@ -1,10 +1,15 @@
 package com.example.siaga.api
 
+import com.example.siaga.model.AbsensiResponse
+import com.example.siaga.model.IzinResponse
+import com.example.siaga.model.RegisterResponse
 import com.example.siaga.view.model.HistoryResponse
+import com.example.siaga.view.model.HistoryWrapper
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
-import java.sql.Timestamp
 
 // Model data absen
 //data class ModelDatabase(
@@ -67,25 +72,64 @@ interface ApiService {
     ): Call<LoginResponse>
 
     // ================= SIGNUP =================
+    @Multipart
     @POST("register")
-    fun signup(
-        @Body request: SignupRequest
-    ): Call<ApiResponse>
+    fun register(
+        @Part foto_profil: MultipartBody.Part?,
+        @Part("nama") nama: RequestBody,
+        @Part("nip") nip: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("no_telp") noTelp: RequestBody,
+        @Part("tanggal_lahir") tanggalLahir: RequestBody,
+        @Part("jabatan") jabatan: RequestBody,
+        @Part("bagian") bagian: RequestBody,
+        @Part("sub_bagian") subBagian: RequestBody,
+        @Part("password") password: RequestBody,
+    ): Call<RegisterResponse>
 
     // Absen masuk (dengan header token)
+    @Multipart
     @POST("absen/masuk")
-    @Headers("Accept: application/json")
     fun absenMasuk(
         @Header("Authorization") token: String,
-        @Body request: AbsenRequest
-    ): Call<HistoryResponse>
+        @Part gambar: MultipartBody.Part,
+        @Part("nama") nama: RequestBody,
+        @Part("lokasi") lokasi: RequestBody,
+    ): Call<AbsensiResponse>
+
+    //Absen Pulang
+    @Multipart
+    @POST("absen/pulang")
+    fun absenPulang(
+        @Header("Authorization") token: String,
+        @Part gambar: MultipartBody.Part,
+        @Part("nama") nama: RequestBody,
+        @Part("lokasi") lokasi: RequestBody,
+        @Part("laporan_kinerja") laporanHarian: RequestBody,
+    ): Call<AbsensiResponse>
+
+
+    //Perizinan
+    @Multipart
+    @POST("absen/izin")
+    fun Perizinan(
+        @Header("Authorization") token: String,
+        @Part("nama") nama: RequestBody,
+        @Part("lokasi") lokasi: RequestBody,
+        @Part("jenis_izin") jenisIzin: RequestBody,              // Foto selfie wajib
+        @Part gambar: MultipartBody.Part,
+        @Part bukti: MultipartBody.Part,
+        @Part ("bukti_asli") buktiAsli: RequestBody// Wajib (lampiran pendukung)){}
+    ): Call<IzinResponse>
+
 
     // Dapatkan history absen
+//    @GET("absen/history")
+//    suspend fun getAllHistory(): Response<HistoryWrapper>
     @GET("absen/history")
-    @Headers("Accept: application/json")
     fun getAllHistory(
         @Header("Authorization") token: String
-    ): Call<List<HistoryResponse>>
+    ): Call<HistoryWrapper>
 
     // Insert data (opsional, jika tetap dipakai)
     @POST("insert")
