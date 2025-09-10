@@ -2,25 +2,20 @@ package com.example.siaga.view.signup
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.siaga.R
 import com.example.siaga.api.ApiClient
-import com.example.siaga.api.ApiResponse
-import com.example.siaga.api.SignupRequest
 import com.example.siaga.databinding.ActivitySignupBinding
 import com.example.siaga.model.RegisterResponse
 import com.example.siaga.view.login.LoginActivity
-import de.hdodenhof.circleimageview.CircleImageView
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -36,16 +31,23 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private var profileImageUri: Uri? = null
     private val PICK_IMAGE_REQUEST = 100
-
     private val REQUEST_GALLERY = 100
     private val REQUEST_CAMERA = 101
+    private val MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
+
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Klik foto profil → pilih kamera/galeri
+        progressDialog = ProgressDialog(this).apply {
+            setMessage("Mendaftarkan akun")
+            setCancelable(false)
+        }
+
+        // Klik foto profil → pilih dari galeri
         binding.profileImage1.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
@@ -61,48 +63,20 @@ class SignUpActivity : AppCompatActivity() {
             registerUser()
         }
 
-        //Dropdown Jabatan
-        val jabatannList = listOf(
-            "Kabag",
-            "Kasubag",
-            "Pelaksana"
-        )
-
+        // Dropdown Jabatan
+        val jabatannList = listOf("Kabag", "Kasubag", "Pelaksana")
         val jabatanAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, jabatannList)
         binding.inputJabatan.setAdapter(jabatanAdapter)
 
-        //Dropdown Bagian
+        // Dropdown Bagian
         val bagianList = listOf(
-                "Keuangan, Umum, Logistik",
-                "Teknis Penyelenggaraan Pemilu, ParHumas",
-                "Perencanaan, Data dan Informasi",
-                "Hukum dan Sumber Daya Manusia"
+            "Keuangan, Umum, Logistik",
+            "Teknis Penyelenggaraan Pemilu, ParHumas",
+            "Perencanaan, Data dan Informasi",
+            "Hukum dan Sumber Daya Manusia"
         )
-
         val bagianAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, bagianList)
         binding.inputBagian.setAdapter(bagianAdapter)
-
-
-
-    }
-
-    private fun showImagePickerDialog() {
-        val options = arrayOf("Ambil Foto", "Pilih dari Galeri")
-        AlertDialog.Builder(this)
-            .setTitle("Pilih Foto Profil")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> {
-                        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        startActivityForResult(cameraIntent, REQUEST_CAMERA)
-                    }
-                    1 -> {
-                        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                        startActivityForResult(galleryIntent, REQUEST_GALLERY)
-                    }
-                }
-            }
-            .show()
     }
 
     private fun showDatePicker() {
@@ -111,16 +85,14 @@ class SignUpActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        DatePickerDialog(this, { _, y, m, d ->
-            val tanggalFormat = String.format("%04d-%02d-%02d", y, m + 1, d)
+        DatePickerDialog(this, { _, d, m, y ->
+            //Format D-M-Y
+            val tanggalFormat = String.format("%04d-%02d-%02d", d, m + 1, y)
             binding.inputTanggalLhr.setText(tanggalFormat)
-
         }, year, month, day).show()
-
     }
 
     private fun registerUser() {
-        // Ambil data dari inputan
         val nama = binding.inputNama.text.toString().trim()
         val nip = binding.inputNIP.text.toString().trim()
         val email = binding.inputEmail.text.toString().trim()
@@ -130,15 +102,31 @@ class SignUpActivity : AppCompatActivity() {
         val bagian = binding.inputBagian.text.toString().trim()
         val subBagian = binding.inputSubBagian.text.toString().trim()
         val password = binding.inputPassword.text.toString().trim()
+        val passwordConfirmation = binding.ConfirmPassword.text.toString().trim()
 
-        // Validasi input kosong
+        //Validasi untuk field yang kosong
         if (nama.isEmpty() || nip.isEmpty() || email.isEmpty() || noTelp.isEmpty() ||
-            tanggalLahir.isEmpty() || jabatan.isEmpty() || bagian.isEmpty()) {
+            tanggalLahir.isEmpty() || jabatan.isEmpty() || bagian.isEmpty() ||
+            password.isEmpty() || passwordConfirmation.isEmpty()) {
             Toast.makeText(this, "Semua field wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Buat RequestBody untuk setiap field
+        //Validasi password cocok
+        if (password != passwordConfirmation) {
+            Toast.makeText(this, "Password tidak cocok", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Validasi foto profil wajib
+        if (profileImageUri == null) {
+            Toast.makeText(this, "Foto profil wajib diisi!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        //Tampilkan loading
+        progressDialog.show()
+
         val namaBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nama)
         val nipBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nip)
         val emailBody = RequestBody.create("text/plain".toMediaTypeOrNull(), email)
@@ -148,18 +136,24 @@ class SignUpActivity : AppCompatActivity() {
         val bagianBody = RequestBody.create("text/plain".toMediaTypeOrNull(), bagian)
         val subBagianBody = RequestBody.create("text/plain".toMediaTypeOrNull(), subBagian)
         val passwordBody = RequestBody.create("text/plain".toMediaTypeOrNull(), password)
+        val passwordConfirmationBody = RequestBody.create("text/plain".toMediaTypeOrNull(), passwordConfirmation)
 
-        // Handle foto (opsional)
-        var fotoPart: MultipartBody.Part? = null
-        profileImageUri?.let { uri ->
-            val file = uriToFile(uri)
-            file?.let {
-                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), it)
-                fotoPart = MultipartBody.Part.createFormData("foto_profil", it.name, requestFile)
-            }
+        // Buat MultipartBody.Part untuk foto profil
+        val file = uriToFile(profileImageUri!!)
+        if (file == null || !file.exists()) {
+            progressDialog.dismiss()
+            Toast.makeText(this, "Gagal membaca file foto profil", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (file.length() > MAX_IMAGE_SIZE) {
+            progressDialog.dismiss()
+            Toast.makeText(this, "Ukuran foto maksimal 5MB!", Toast.LENGTH_LONG).show()
+            return
         }
 
-        // Panggil API
+        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val fotoPart = MultipartBody.Part.createFormData("foto_profil", file.name, requestFile)
+
         ApiClient.instance.register(
             fotoPart,
             namaBody,
@@ -170,25 +164,36 @@ class SignUpActivity : AppCompatActivity() {
             jabatanBody,
             bagianBody,
             subBagianBody,
-            passwordBody
+            passwordBody,
+            passwordConfirmationBody
         ).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    Toast.makeText(this@SignUpActivity, "Register sukses: ${body?.message}", Toast.LENGTH_SHORT).show()
+
+                // Selalu tutup progressDialog di awal onResponse
+                progressDialog.dismiss()
+
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
+                    Toast.makeText(this@SignUpActivity, "Register sukses: ${body.message}", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this@SignUpActivity, "Error: ${response.errorBody()?.string()}", Toast.LENGTH_LONG).show()
+
+                    // Tangani error validasi atau error server
+                    val errorMsg = response.errorBody()?.string() ?: "Terjadi kesalahan saat register"
+                    Toast.makeText(this@SignUpActivity, errorMsg, Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                Toast.makeText(this@SignUpActivity, "Gagal: ${t.message}", Toast.LENGTH_LONG).show()
+
+                // Selalu tutup progressDialog di onFailure juga
+                progressDialog.dismiss()
+                Toast.makeText(this@SignUpActivity, "Gagal: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
             }
         })
-    }
 
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -211,26 +216,4 @@ class SignUpActivity : AppCompatActivity() {
             null
         }
     }
-
-
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (resultCode == Activity.RESULT_OK) {
-//            when (requestCode) {
-//                REQUEST_GALLERY -> {
-//                    profileImageUri = data?.data
-//                    binding.profileImage1.setImageURI(profileImageUri)
-//                }
-//                REQUEST_CAMERA -> {
-//                    val photo: Bitmap? = data?.extras?.get("data") as? Bitmap
-//                    if (photo != null) {
-//                        binding.profileImage1.setImageBitmap(photo)
-//                        // Untuk menyimpan gambar kamera, perlu simpan ke file dan dapatkan URI
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

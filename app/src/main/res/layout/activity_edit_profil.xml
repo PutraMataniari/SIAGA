@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,6 +13,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/icback"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:navigationIcon="@drawable/ic_back">
@@ -33,9 +33,7 @@
                     android:textSize="24sp" />
 
             </RelativeLayout>
-
         </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -63,6 +61,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <!-- FOTO PROFIL -->
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -77,11 +76,7 @@
                             android:layout_marginTop="10dp"
                             android:src="@drawable/bendera"
                             app:civ_border_color="#FFFFFF"
-                            app:civ_border_width="1dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.498"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:civ_border_width="1dp" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -105,12 +100,13 @@
                             android:hint="Nama Lengkap"
                             android:imeOptions="actionNext"
                             android:inputType="textPersonName"
-                            android:text="Mataniari"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/red"
                             android:textSize="18sp"
+                            android:layout_margin="10dp"
                             android:fontFamily="@font/poppins_medium" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,8 +130,9 @@
                             android:hint="NIP"
                             android:imeOptions="actionNext"
                             android:inputType="number"
-                            android:text="1234567890"
+                            android:text=""
                             android:maxLines="1"
+                            android:layout_margin="10dp"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
@@ -163,9 +160,10 @@
                             android:hint="Jabatan"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="Kasubbag Keuangan"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
@@ -192,16 +190,17 @@
                             android:hint="Bagian"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="Keuangan, Umum dan Logistik"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!--Bagian -->
+                    <!--Sub Bagian -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
@@ -221,16 +220,17 @@
                             android:hint="Sub Bagian"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="Keuangan, Umum dan Logistik"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!--Bagian -->
+                    <!--Nomor Telepon -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
@@ -249,16 +249,16 @@
                             android:layout_height="wrap_content"
                             android:hint="No Telp"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:text="08123456789"
+                            android:inputType="phone"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium" />
                     </com.google.android.material.textfield.TextInputLayout>
-
 
                     <!-- Email -->
                     <com.google.android.material.textfield.TextInputLayout
@@ -280,9 +280,10 @@
                             android:hint="Email"
                             android:imeOptions="actionNext"
                             android:inputType="textEmailAddress"
-                            android:text="email@contoh.com"
+                            android:text=""
                             android:maxLines="1"
                             android:singleLine="true"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
@@ -309,14 +310,14 @@
                             android:hint="Tanggal Lahir"
                             android:focusable="false"
                             android:clickable="true"
-                            android:text="01/01/1990"
+                            android:text=""
                             android:inputType="datetime"
+                            android:layout_margin="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
                             android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium" />
                     </com.google.android.material.textfield.TextInputLayout>
-
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnUpdate"
@@ -334,14 +335,21 @@
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="22dp"
-                        app:cornerRadius="20dp"/>
+                        app:cornerRadius="20dp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
             </androidx.cardview.widget.CardView>
-
         </androidx.appcompat.widget.LinearLayoutCompat>
-
     </androidx.core.widget.NestedScrollView>
+
+    <!-- ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge"
+        android:indeterminate="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

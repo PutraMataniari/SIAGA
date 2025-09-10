@@ -13,83 +13,75 @@
         android:background="@android:color/transparent"
         app:elevation="0dp">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="@drawable/ic_back">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Riwayat Absensi"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/poppins_semibold"/>
+            </FrameLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <!-- 🔍 Search & Filter -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:elevation="0dp">
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <!-- Search bar -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                app:navigationIcon="@drawable/ic_back">
+                android:layout_height="wrap_content"
+                android:queryHint="Cari absen (masuk, pulang, izin)"
+                android:iconifiedByDefault="false"/>
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
+            <!-- Spinner Filter -->
+            <Spinner
+                android:id="@+id/spinnerFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:spinnerMode="dropdown" />
 
-                    <TextView
-                        android:id="@+id/toolbar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Riwayat Absensi"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:fontFamily="@font/poppins_semibold"/>
-                </FrameLayout>
+            <!-- Tombol Pilih Bulan -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPilihBulan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pilih Bulan"
+                app:icon="@drawable/ic_clear"
+                app:iconGravity="end"
+                app:iconPadding="8dp"
+                app:iconTint="@color/black"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-        <!--        <com.google.android.material.appbar.AppBarLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:elevation="0dp">-->
-
-<!--            <com.google.android.material.appbar.MaterialToolbar-->
-<!--                android:id="@+id/toolbar"-->
+            <!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btnPilihBulan"-->
+<!--                style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
 <!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                android:background="@color/white"-->
-<!--                app:navigationIcon="@drawable/ic_back"-->
-<!--                app:title="Riwayat Absensi"-->
-<!--                app:titleCentered="true"-->
-<!--                app:titleTextColor="@color/black"-->
-<!--                -->
-<!--                app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium"/>-->
-<!--        </com.google.android.material.appbar.AppBarLayout>-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="Pilih Bulan" />-->
 
-
-        <!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?actionBarSize"-->
-<!--            app:navigationIcon="@drawable/ic_back">-->
-
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerInParent="true"-->
-<!--                    android:text="Riwayat Absensi"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:fontFamily="@font/poppins_semibold" />-->
-
-<!--            </RelativeLayout>-->
-
-<!--        </androidx.appcompat.widget.Toolbar>-->
-
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- RecyclerView -->
@@ -111,9 +103,10 @@
     <!-- State kosong -->
     <TextView
         android:id="@+id/tvNotFound"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:text="Ups, Anda belum absen hari ini"
         android:textColor="@color/black"
         android:textSize="18sp"

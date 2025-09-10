@@ -10,33 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<!--        <androidx.appcompat.widget.LinearLayoutCompat-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <androidx.appcompat.widget.AppCompatImageView-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_height="150dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:src="@drawable/ic_kpu" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:fontFamily="@font/poppins_black"-->
-<!--                android:text="Selamat Datang di SIAGA"-->
-<!--                android:textAllCaps="true"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="22sp"-->
-<!--                app:fontFamily="@font/poppins_bold" />-->
-
-<!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -214,7 +187,7 @@
                                 android:layout_gravity="center"
                                 android:hint="No.Telepon"
                                 android:imeOptions="actionNext"
-                                android:inputType="number"
+                                android:inputType="phone"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/black"
@@ -298,34 +271,6 @@
                                 android:fontFamily="@font/poppins_medium"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
-<!--                        <com.google.android.material.textfield.TextInputLayout-->
-<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_margin="20dp"-->
-<!--                            app:boxCornerRadiusBottomEnd="20dp"-->
-<!--                            app:boxCornerRadiusBottomStart="20dp"-->
-<!--                            app:boxCornerRadiusTopEnd="20dp"-->
-<!--                            app:boxCornerRadiusTopStart="20dp"-->
-<!--                            app:boxStrokeColor="@color/black"-->
-<!--                            app:hintTextColor="@color/black">-->
-
-<!--                            <com.google.android.material.textfield.TextInputEditText-->
-<!--                                android:id="@+id/inputJabatan"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:hint="Jabatan"-->
-<!--                                android:imeOptions="actionNext"-->
-<!--                                android:inputType="text"-->
-<!--                                android:maxLines="1"-->
-<!--                                android:singleLine="true"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:textColorHint="@color/black"-->
-<!--                                android:textSize="18sp"-->
-<!--                                android:fontFamily="@font/poppins_medium"/>-->
-
-<!--                        </com.google.android.material.textfield.TextInputLayout>-->
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -364,52 +309,6 @@
                                 android:fontFamily="@font/poppins_medium"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
-<!--                        <com.google.android.material.textfield.TextInputLayout-->
-<!--                            android:id="@+id/layoutBagian"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:hint="Bagian"-->
-<!--                            android:layout_margin="20dp"-->
-<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                            app:endIconMode="dropdown_menu">-->
-
-<!--                            <AutoCompleteTextView-->
-<!--                                android:id="@+id/inputBagian"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:inputType="none"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:textSize="14sp" />-->
-<!--                        </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--                        <com.google.android.material.textfield.TextInputLayout-->
-<!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_margin="20dp"-->
-<!--                            app:boxCornerRadiusBottomEnd="20dp"-->
-<!--                            app:boxCornerRadiusBottomStart="20dp"-->
-<!--                            app:boxCornerRadiusTopEnd="20dp"-->
-<!--                            app:boxCornerRadiusTopStart="20dp"-->
-<!--                            app:boxStrokeColor="@color/black"-->
-<!--                            app:hintTextColor="@color/black">-->
-
-<!--                            <com.google.android.material.textfield.TextInputEditText-->
-<!--                                android:id="@+id/inputBagian"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:hint="Bagian"-->
-<!--                                android:imeOptions="actionNext"-->
-<!--                                android:inputType="text"-->
-<!--                                android:maxLines="1"-->
-<!--                                android:singleLine="true"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:textColorHint="@color/black"-->
-<!--                                android:textSize="18sp"-->
-<!--                                android:fontFamily="@font/poppins_medium"/>-->
-
-<!--                        </com.google.android.material.textfield.TextInputLayout>-->
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -511,7 +410,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:hint="Confirm Password"
+                            android:hint="Konfirmasi Password"
                             android:imeOptions="actionDone"
                             android:inputType="textPassword"
                             android:maxLines="1"

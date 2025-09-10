@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bendera">
 
-    <!-- Tombol Logout -->
+    <!-- Profil -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageProfile"
         android:layout_width="40dp"

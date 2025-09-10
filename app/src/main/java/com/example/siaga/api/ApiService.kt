@@ -1,69 +1,27 @@
 package com.example.siaga.api
 
-import com.example.siaga.model.AbsensiResponse
-import com.example.siaga.model.IzinResponse
-import com.example.siaga.model.RegisterResponse
+import com.example.siaga.model.*
 import com.example.siaga.view.model.HistoryResponse
 import com.example.siaga.view.model.HistoryWrapper
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.*
-
-// Model data absen
-//data class ModelDatabase(
-//    val id: Int,
-//    val jenis: String,
-//    val nama: String,
-//    val waktuabsen: Timestamp,
-//    val lokasi: String,
-//    val gambar: String,
-//    val keterangan: String,
-//    val bukti: String
-//)
-
-// Response login
-data class LoginResponse(
-    val user: User,
-    val token: String
-)
-
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String
-)
-
-// ===================
-// Request Signup
-// ===================
-data class SignupRequest(
-    val name: String,
-    val email: String,
-    val password: String,
-    val password_confirmation: String
-)
-
-data class ApiResponse(
-    val status: Boolean,
-    val message: String
-)
-
-// Request body untuk absen
-data class AbsenRequest(
-    val nama: String,
-    val tanggal: String,
-    val lokasi: String,
-    val gambar: String,
-    val keterangan: String? = null,
-    val laporanHarian: String? = null,
-    val lampiran: String? = null // untuk perizinan
-)
 
 interface ApiService {
 
-    // Login untuk dapat token
+
+    data class UploadConfigResponse(
+        val max_upload_size: Long,
+        val allowed_image_types: List<String>,
+        val allowed_doc_types: List<String>
+    )
+
+
+        @GET("upload-config")
+        fun getUploadConfig(): Call<UploadConfigResponse>
+
+    // ================= LOGIN =================
     @FormUrlEncoded
     @POST("login")
     fun login(
@@ -75,7 +33,7 @@ interface ApiService {
     @Multipart
     @POST("register")
     fun register(
-        @Part foto_profil: MultipartBody.Part?,
+        @Part foto_profil: MultipartBody.Part,
         @Part("nama") nama: RequestBody,
         @Part("nip") nip: RequestBody,
         @Part("email") email: RequestBody,
@@ -85,55 +43,72 @@ interface ApiService {
         @Part("bagian") bagian: RequestBody,
         @Part("sub_bagian") subBagian: RequestBody,
         @Part("password") password: RequestBody,
+        @Part("password_confirmation") passwordConfirmation: RequestBody
     ): Call<RegisterResponse>
 
-    // Absen masuk (dengan header token)
+    // ================= ABSEN MASUK =================
     @Multipart
     @POST("absen/masuk")
     fun absenMasuk(
         @Header("Authorization") token: String,
-        @Part gambar: MultipartBody.Part,
         @Part("nama") nama: RequestBody,
-        @Part("lokasi") lokasi: RequestBody,
+        @Part gambar: MultipartBody.Part,
+        @Part("lokasi") lokasi: RequestBody
     ): Call<AbsensiResponse>
 
-    //Absen Pulang
+    // ================= ABSEN PULANG =================
     @Multipart
     @POST("absen/pulang")
     fun absenPulang(
         @Header("Authorization") token: String,
-        @Part gambar: MultipartBody.Part,
         @Part("nama") nama: RequestBody,
+        @Part gambar: MultipartBody.Part,
         @Part("lokasi") lokasi: RequestBody,
-        @Part("laporan_kinerja") laporanHarian: RequestBody,
+        @Part("laporan_kinerja") laporanHarian: RequestBody
     ): Call<AbsensiResponse>
 
-
-    //Perizinan
+    // ================= PERIZINAN =================
     @Multipart
     @POST("absen/izin")
-    fun Perizinan(
+    fun submitIzin(
         @Header("Authorization") token: String,
         @Part("nama") nama: RequestBody,
         @Part("lokasi") lokasi: RequestBody,
-        @Part("jenis_izin") jenisIzin: RequestBody,              // Foto selfie wajib
+        @Part("jenis_izin") jenisIzin: RequestBody,
         @Part gambar: MultipartBody.Part,
-        @Part bukti: MultipartBody.Part,
-        @Part ("bukti_asli") buktiAsli: RequestBody// Wajib (lampiran pendukung)){}
+        @Part bukti: MultipartBody.Part
+//        @Part("bukti_asli") buktiAsli: RequestBody
     ): Call<IzinResponse>
 
 
-    // Dapatkan history absen
-//    @GET("absen/history")
-//    suspend fun getAllHistory(): Response<HistoryWrapper>
+    // ================= GET PROFIL =================
+    @GET("profil")
+    suspend fun getProfil(
+        @Header("Authorization") token: String): ProfilResponse
+
+    // ================= UPDATE PROFIL =================
+    @Multipart
+    @POST("profil/update")
+    suspend fun updateProfil(
+        @Header("Authorization") token: String,
+        @Part("nama") nama: RequestBody,
+        @Part("nip") nip: RequestBody,
+        @Part("jabatan") jabatan: RequestBody,
+        @Part("bagian") bagian: RequestBody,
+        @Part("sub_bagian") subBagian: RequestBody? = null,
+        @Part("no_telp") noTelp: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("tanggal_lahir") tanggalLahir: RequestBody? = null,
+        @Part foto_profil: MultipartBody.Part? = null
+    ): ProfilResponse
+
+    // ================= HISTORY ABSEN =================
     @GET("absen/history")
     fun getAllHistory(
         @Header("Authorization") token: String
     ): Call<HistoryWrapper>
 
-    // Insert data (opsional, jika tetap dipakai)
+    // OPSIONAL - INSERT HISTORY MANUAL
     @POST("insert")
     fun insertData(@Body historyResponse: HistoryResponse): Call<Void>
-
-//    fun getHistory(): Response<List<HistoryResponse>>
 }

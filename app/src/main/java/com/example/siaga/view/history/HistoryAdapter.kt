@@ -22,6 +22,8 @@ class HistoryAdapter(
     private val items: MutableList<HistoryResponse>
 ) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
+    private val originalList: MutableList<HistoryResponse> = mutableListOf()
+
     class ViewHolder(val binding: ListHistoryAbsenBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -35,8 +37,8 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = items[position]
         with(holder.binding) {
-            tvNomor.text = (1 + position).toString()
-            tvNama.text = data.nama
+//            tvNomor.text = (1 + position).toString()
+            tvNama.text = data.pegawai?.nama ?: "_"
 //            tvLaporan.text = data.laporan_kinerja
             tvLokasi.text = data.lokasi
             tvAbsenTime.text = data.waktu_absen
@@ -56,6 +58,8 @@ class HistoryAdapter(
             layoutLaporan.visibility = View.GONE
             layoutJenisIzin.visibility = View.GONE
             layoutLampiran.visibility = View.GONE
+            layoutStatusIzin.visibility = View.GONE
+            layoutCatatanAdmin.visibility = View.GONE
 
             when (data.jenis?.lowercase()) {
                 "masuk" -> {
@@ -79,12 +83,73 @@ class HistoryAdapter(
                 "izin" -> {
                     colorStatus.setCardBackgroundColor(Color.parseColor("#2196F3"))
 
-                    // tampil Jenis Izin + Lampiran
+                    // tampilkan Jenis Izin
                     layoutJenisIzin.visibility = View.VISIBLE
                     tvJenisIzin.text = data.jenis_izin ?: "-"
+
+                    //Tampilkan Lampiran
                     layoutLampiran.visibility = View.VISIBLE
                     tvLampiran.text = data.bukti_asli ?: "-"
-//                    tvLaporan.visibility = View.GONE
+
+                    // ✅ tampilkan Status Izin
+                    layoutStatusIzin.visibility = View.VISIBLE
+                    when (data.status?.lowercase()) {
+                        "pending" -> {
+                            tvStatusIzin.text = "Pending"
+                            tvStatusIzin.setTextColor(Color.parseColor("#FFC107")) // kuning
+                            tvStatusIzin.setTypeface(null, android.graphics.Typeface.BOLD)
+                        }
+                        "ditolak" -> {
+                            tvStatusIzin.text = "Ditolak"
+                            tvStatusIzin.setTextColor(Color.parseColor("#F44336")) // merah
+                            tvStatusIzin.setTypeface(null, android.graphics.Typeface.BOLD)
+                        }
+                        "disetujui" -> {
+                            tvStatusIzin.text = "Disetujui"
+                            tvStatusIzin.setTextColor(Color.parseColor("#2196F3")) // biru
+                            tvStatusIzin.setTypeface(null, android.graphics.Typeface.BOLD)
+                        }
+                        else -> {
+                            tvStatusIzin.text = "Pending"
+                            tvStatusIzin.setTextColor(Color.GRAY)
+                            tvStatusIzin.setTypeface(null, android.graphics.Typeface.NORMAL)
+                        }
+                    }
+//                    tvStatusIzin.text = data.status?.replaceFirstChar { it.uppercase() } ?: "Pending"
+
+                    // ✅ tampilkan Catatan Admin kalau ada
+                    if (!data.catatan_admin.isNullOrEmpty()) {
+                        layoutCatatanAdmin.visibility = View.VISIBLE
+//                        tvCatatanAdmin.text = data.catatan_admin
+                        when (data.status?.lowercase()) {
+                            "disetujui" -> {
+                                tvCatatanAdmin.text = data.catatan_admin
+                                tvCatatanAdmin.setTextColor(Color.parseColor("#4CAF50")) // hijau
+                                tvCatatanAdmin.setTypeface(null, android.graphics.Typeface.BOLD)
+                            }
+                            "ditolak" -> {
+                                tvCatatanAdmin.text = data.catatan_admin
+                                tvCatatanAdmin.setTextColor(Color.parseColor("#F44336")) // merah
+                                tvCatatanAdmin.setTypeface(null, android.graphics.Typeface.BOLD)
+                            }
+                            else -> {
+                                tvCatatanAdmin.text = data.catatan_admin
+                                tvCatatanAdmin.setTextColor(Color.DKGRAY) // abu netral
+                                tvCatatanAdmin.setTypeface(null, android.graphics.Typeface.NORMAL)
+                            }
+                        }
+                    } else {
+                        layoutCatatanAdmin.visibility = View.GONE
+                    }
+
+                    // 🔥 Tambahan indikator di pojok kanan atas
+//                    indicatorStatus.visibility = View.VISIBLE
+//                    when (data.status?.lowercase()) {
+//                        "pending" -> indicatorStatus.setBackgroundColor(Color.parseColor("#FFC107")) // kuning
+//                        "ditolak" -> indicatorStatus.setBackgroundColor(Color.parseColor("#F44336")) // merah
+//                        "disetujui" -> indicatorStatus.setBackgroundColor(Color.parseColor("#2196F3")) // biru
+//                        else -> indicatorStatus.setBackgroundColor(Color.GRAY) // default abu
+//                    }
                 }
                 else -> {
                     colorStatus.setCardBackgroundColor(Color.GRAY)
@@ -97,8 +162,31 @@ class HistoryAdapter(
     override fun getItemCount() = items.size
 
     fun setData(newList: List<HistoryResponse>) {
+        originalList.clear()
+        originalList.addAll(newList)
+
         items.clear()
         items.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    /**
+     * 🔍 Filter data berdasarkan query (jenis, nama, status) & tanggal
+     */
+    fun filterData(query: String?, tanggalFilter: (HistoryResponse) -> Boolean) {
+        items.clear()
+        items.addAll(
+            originalList.filter { item ->
+                val matchQuery = query.isNullOrEmpty() ||
+                        item.jenis?.contains(query, ignoreCase = true) == true ||
+                        item.pegawai?.nama?.contains(query, ignoreCase = true) == true ||
+                        item.status?.contains(query, ignoreCase = true) == true
+
+                val matchTanggal = tanggalFilter(item)
+
+                matchQuery && matchTanggal
+            }
+        )
         notifyDataSetChanged()
     }
 

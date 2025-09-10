@@ -143,6 +143,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:backgroundTint="@android:color/holo_red_light"
+                            android:focusableInTouchMode="false"
                             android:fontFamily="@font/poppins_regular"
                             android:hint="Masukan nama Anda"
                             android:imeOptions="actionNext"
@@ -263,17 +264,32 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/inputlaporan"
+                            android:id="@+id/inputLaporan"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@android:color/holo_red_light"
-                            android:fontFamily="@font/poppins_regular"
-                            android:hint="Masukan Laporan Harian"
-                            android:imeOptions="actionDone"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:layout_height="150dp"
+                            android:hint="Tulis laporan harian..."
+                            android:gravity="top|start"
+                            android:background="@drawable/edittext_background"
+                            android:inputType="textMultiLine"
+                            android:lines="5"
+                            android:maxLines="10"
+                            android:scrollbars="vertical"
+                            android:padding="12dp"
+                            android:overScrollMode="always"/>
+
+
+                        <!--                        <EditText-->
+<!--                            android:id="@+id/inputlaporan"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="60dp"-->
+<!--                            android:backgroundTint="@android:color/holo_red_light"-->
+<!--                            android:fontFamily="@font/poppins_regular"-->
+<!--                            android:hint="Masukan Laporan Harian"-->
+<!--                            android:imeOptions="actionDone"-->
+<!--                            android:maxLines="1"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="12sp" />-->
 
                     </LinearLayout>
 

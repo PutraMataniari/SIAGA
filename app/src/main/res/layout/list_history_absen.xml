@@ -28,6 +28,18 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"/>
 
+        <!-- Indikator Status Izin di pojok kanan atas -->
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:id="@+id/indicatorStatus"-->
+<!--            android:layout_width="16dp"-->
+<!--            android:layout_height="16dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            app:cardCornerRadius="4dp"-->
+<!--            android:background="@drawable/bg_circle_gray" />-->
+
+
         <!-- Kontainer teks -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,13 +73,6 @@
                     app:cardCornerRadius="4dp"
                     app:cardBackgroundColor="@color/gray" />
 
-
-<!--                <View-->
-<!--                    android:id="@+id/colorStatus"-->
-<!--                    android:layout_width="16dp"-->
-<!--                    android:layout_height="16dp"-->
-<!--                    android:layout_marginStart="5dp"-->
-<!--                    android:background="@color/gray" />-->
             </LinearLayout>
 
             <View
@@ -77,35 +82,35 @@
                 android:background="@color/black" />
 
             <!-- No -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="No"
-                    android:textSize="12sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="4"-->
+<!--                    android:fontFamily="@font/poppins_medium"-->
+<!--                    android:text="No"-->
+<!--                    android:textSize="12sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=":"
-                    android:textSize="12sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text=":"-->
+<!--                    android:textSize="12sp" />-->
 
-                <TextView
-                    android:id="@+id/tvNomor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:text="112233445566"
-                    android:textSize="12sp" />
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/tvNomor"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="7"-->
+<!--                    android:text="112233445566"-->
+<!--                    android:textSize="12sp" />-->
+<!--            </LinearLayout>-->
 
             <!-- Nama -->
             <LinearLayout
@@ -117,7 +122,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="Nama"
                     android:textSize="12sp" />
 
@@ -126,6 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=":"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
 
                 <TextView
@@ -134,37 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:text="Mataniari"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <!-- Lokasi -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Waktu Absen"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=":"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvAbsenTime"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:text="Head Office"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -178,7 +154,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Waktu Absen"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=":"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvAbsenTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Head Office"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Lokai -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="Lokasi"
                     android:textSize="12sp" />
 
@@ -187,6 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=":"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
 
                 <TextView
@@ -195,6 +204,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:text="14/1/2022 09:00"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -210,7 +220,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="Laporan Kinerja"
                     android:textSize="12sp" />
 
@@ -219,6 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=":"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
 
                 <TextView
@@ -227,6 +238,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:text="Abcde"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -242,7 +254,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="Jenis Izin"
                     android:textSize="12sp" />
 
@@ -251,6 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=":"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
 
                 <TextView
@@ -259,6 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:text="Jenis Izin"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -274,7 +288,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="Bukti Lampiran"
                     android:textSize="12sp" />
 
@@ -283,6 +297,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=":"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp" />
 
                 <TextView
@@ -291,9 +306,79 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:text="Lampiran"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp"
                     />
             </LinearLayout>
+
+            <!-- Status Izin -->
+            <LinearLayout
+                android:id="@+id/layoutStatusIzin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Status Izin"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=":"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvStatusIzin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Pending"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Catatan Admin -->
+            <LinearLayout
+                android:id="@+id/layoutCatatanAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Catatan Admin"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=":"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvCatatanAdmin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Tidak ada catatan"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
