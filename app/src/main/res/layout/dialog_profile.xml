@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_bottomsheet">
+
+    <!-- Foto Profil -->
+    <ImageView
+        android:id="@+id/imgProfileDialog"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:src="@drawable/profile"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/circle_bg"
+        android:padding="2dp" />
+
+    <!-- Nama -->
+    <TextView
+        android:id="@+id/tvNameDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama User"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppins_bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Menu Profile -->
+    <TextView
+        android:id="@+id/btnProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Lihat Profil"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_semibold"
+        android:drawableStart="@drawable/profile"
+        android:drawablePadding="12dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical" />
+
+    <!-- Menu Logout -->
+    <TextView
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Logout"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@android:color/holo_red_dark"
+        android:drawableStart="@drawable/ic_logout"
+        android:drawablePadding="12dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical" />
+
+</LinearLayout>

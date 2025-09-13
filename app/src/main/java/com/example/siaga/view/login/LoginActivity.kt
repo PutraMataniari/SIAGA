@@ -132,7 +132,8 @@ class LoginActivity : AppCompatActivity() {
                             token = token,
                             name = name,
                             nama = nama,
-                            email = emailUser
+                            email = emailUser,
+                            photo =  ""
                         )
                     }
 

@@ -1,9 +1,8 @@
-// AbsenMasukActivity Revisi
-
 package com.example.siaga.view.absen
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -52,7 +51,7 @@ class AbsenMasukActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAbsenMasukBinding
     private lateinit var dataStoreManager: DataStoreManager
-    private lateinit var loadingDialog: AlertDialog
+    private lateinit var progressDialog: ProgressDialog
     private lateinit var cameraUri: Uri
 
     private var strCurrentLatitude = 0.0
@@ -125,19 +124,21 @@ class AbsenMasukActivity : AppCompatActivity() {
     }
 
     private fun initLoading() {
-        loadingDialog = AlertDialog.Builder(this)
-            .setView(layoutInflater.inflate(R.layout.dialog_loading, null))
-            .setCancelable(false)
-            .create()
+        progressDialog = ProgressDialog(this).apply {
+            setTitle("Mohon tunggu")
+            setMessage("Sedang mengirim absen masuk...")
+            setCancelable(false)
+        }
     }
 
-    private fun showLoading(message: String = "Mohon tunggu...") {
-        loadingDialog.show()
+    private fun showLoading() {
+        progressDialog.show()
     }
 
     private fun hideLoading() {
-        loadingDialog.dismiss()
+        if (progressDialog.isShowing) progressDialog.dismiss()
     }
+
 
     private fun fetchToken() {
         lifecycleScope.launch {
@@ -175,8 +176,8 @@ class AbsenMasukActivity : AppCompatActivity() {
             Toast.makeText(this, "Harap aktifkan GPS!", Toast.LENGTH_SHORT).show()
             return
         }
+        showLoading()
 
-        showLoading("Mengambil lokasi...")
         val fused = LocationServices.getFusedLocationProviderClient(this)
         fused.lastLocation.addOnSuccessListener { loc: Location? ->
             if (loc != null) {
@@ -309,7 +310,7 @@ class AbsenMasukActivity : AppCompatActivity() {
         val namaBody = nama.toRequestBody("text/plain".toMediaTypeOrNull())
         val lokasiBody = lokasi.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        showLoading("Mengirim absen...")
+        showLoading()
 
         ApiClient.instance.absenMasuk(token, namaBody, gambarPart, lokasiBody)
             .enqueue(object : Callback<AbsensiResponse> {
@@ -327,6 +328,7 @@ class AbsenMasukActivity : AppCompatActivity() {
                         ).show()
                         finish()
                     } else {
+                        hideLoading()
                         try {
                             val errorBody = response.errorBody()?.string()
                             val msg = if (!errorBody.isNullOrEmpty()) {

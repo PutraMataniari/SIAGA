@@ -236,33 +236,6 @@ class HistoryActivity : AppCompatActivity() {
             historyAdapter.setData(finalFiltered)
         }
     }
-//        var filtered = when {
-//            selectedMonth != null -> originalList.filter { it.waktu_absen.startsWith(selectedMonth!!) }
-//            selectedFilter == "Hari Ini" -> originalList.filter { it.waktu_absen.startsWith(today) }
-//            selectedFilter == "Kemarin" -> originalList.filter { it.waktu_absen.startsWith(yesterday) }
-//            selectedFilter == "Bulan Ini" -> originalList.filter { it.waktu_absen.startsWith(currentMonth) }
-//            else -> originalList
-//        }
-//
-//        // search
-//        if (query.isNotEmpty()) {
-//            filtered = filtered.filter {
-//                (it.jenis ?: "").lowercase(Locale.getDefault()).contains(query)
-//            }
-//        }
-//
-//        if (filtered.isEmpty()) {
-//            val msg = when {
-//                selectedMonth != null -> "Ups, Anda belum absen di bulan ini"
-//                selectedFilter == "Hari Ini" -> "Ups, Anda belum absen hari ini"
-//                selectedFilter == "Kemarin" -> "Ups, Anda belum absen kemarin"
-//                else -> "Data tidak ditemukan"
-//            }
-//            showEmptyState(msg)
-//        } else {
-//            hideEmptyState()
-//            historyAdapter.setData(filtered)
-//        }
 
     private fun showEmptyState(message: String) {
         binding.tvNotFound.text = message

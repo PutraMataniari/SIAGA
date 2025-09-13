@@ -2,6 +2,7 @@ package com.example.siaga.view.absen
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -54,7 +55,7 @@ class AbsenPulangActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAbsenPulangBinding
     private lateinit var dataStoreManager: DataStoreManager
-    private lateinit var loadingDialog: AlertDialog
+    private lateinit var progressDialog: ProgressDialog
 
     private var strCurrentLatitude = 0.0
     private var strCurrentLongitude = 0.0
@@ -126,14 +127,20 @@ class AbsenPulangActivity : AppCompatActivity() {
     }
 
     private fun initLoading() {
-        loadingDialog = AlertDialog.Builder(this)
-            .setView(layoutInflater.inflate(R.layout.dialog_loading, null))
-            .setCancelable(false)
-            .create()
+        progressDialog = ProgressDialog(this).apply {
+            setTitle("Mohon tunggu")
+            setMessage("Sedang mengirim absen pulang...")
+            setCancelable(false)
+        }
     }
 
-    private fun showLoading() = loadingDialog.show()
-    private fun hideLoading() = loadingDialog.dismiss()
+    private fun showLoading() {
+        progressDialog.show()
+    }
+
+    private fun hideLoading() {
+        if (progressDialog.isShowing) progressDialog.dismiss()
+    }
 
     private fun fetchToken() {
         lifecycleScope.launch {
@@ -335,6 +342,7 @@ class AbsenPulangActivity : AppCompatActivity() {
         val gambarPart = MultipartBody.Part.createFormData("gambar", file.name, reqFile)
 
         showLoading()
+
         ApiClient.instance.absenPulang(token, namaBody, gambarPart, lokasiBody, laporanBody)
             .enqueue(object : Callback<AbsensiResponse> {
                 override fun onResponse(call: Call<AbsensiResponse>, response: Response<AbsensiResponse>) {
@@ -344,6 +352,7 @@ class AbsenPulangActivity : AppCompatActivity() {
                         Toast.makeText(this@AbsenPulangActivity, "Absen sukses: ${body?.message}", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
+                        hideLoading()
                         try {
                             val errorBody = response.errorBody()?.string()
                             val msg = if (!errorBody.isNullOrEmpty()) {

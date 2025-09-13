@@ -20,6 +20,7 @@
             private val USER_NAME = stringPreferencesKey("user_name")
             private val USER_NAMA = stringPreferencesKey("user_nama")
             private val USER_EMAIL = stringPreferencesKey("user_email")
+            private val USER_PHOTO = stringPreferencesKey("user_photo")
             private val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
         }
 
@@ -31,12 +32,13 @@
             prefs[AUTH_TOKEN]
         }
 
-        suspend fun saveUserData(token: String, name: String, email: String, nama:String?) {
+        suspend fun saveUserData(token: String, name: String, email: String, nama:String?, photo: String?) {
             context.dataStore.edit { prefs ->
                 prefs[AUTH_TOKEN] = token
                 prefs[USER_NAME] = name
                 prefs[USER_NAMA] = nama ?:name
                 prefs[USER_EMAIL] = email
+                prefs[USER_PHOTO] = photo ?: ""
                 prefs[IS_LOGGED_IN] = true
             }
             Log.d("DATASTORE_SAVE", "token=$token, name=$name, nama=$nama, email=$email")
@@ -50,7 +52,8 @@
                     token = prefs[AUTH_TOKEN] ?: "",
                     name = prefs[USER_NAME] ?: "",
                     email = prefs[USER_EMAIL] ?: "",
-                    nama = prefs[USER_NAMA] ?: ""
+                    nama = prefs[USER_NAMA] ?: "",
+                    photo = prefs[USER_PHOTO] ?: ""
                 )
             } else null
         }
@@ -71,5 +74,6 @@
         val token: String,
         val name: String,
         val email: String,
-        val nama: String
+        val nama: String,
+        val photo: String
     )
