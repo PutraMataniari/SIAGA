@@ -14,6 +14,7 @@ data class HistoryResponse(
 //    val nama: String,
     val pegawai: Pegawai?,
     val waktu_absen: String,
+    val waktu_konfirmasi: String?,
     val lokasi: String?,
     val gambar: String?,
     val jenis_izin: String?,
@@ -28,11 +29,22 @@ data class HistoryResponse(
     // ✅ Fungsi ini sekarang bagian dari kelas HistoryResponse
     fun getFormattedDate(): String {
         return try {
-            val inputDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+            val inputDf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
             val outputDf = SimpleDateFormat("dd MMMM yyyy HH:mm", Locale("id", "ID"))
             outputDf.format(inputDf.parse(waktu_absen) ?: return waktu_absen)
         } catch (e: Exception) {
             waktu_absen // fallback jika parsing gagal
+        }
+    }
+
+    fun getFormattedKonfirmasi(): String? {
+        return try {
+            if (waktu_konfirmasi.isNullOrEmpty()) return null
+            val inputDf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+            val outputDf = SimpleDateFormat("dd MMMM yyyy HH:mm", Locale("id", "ID"))
+            outputDf.format(inputDf.parse(waktu_konfirmasi) ?: return waktu_konfirmasi)
+        } catch (e: Exception) {
+            waktu_konfirmasi
         }
     }
 }

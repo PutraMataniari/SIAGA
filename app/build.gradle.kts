@@ -96,6 +96,7 @@ dependencies {
 //    Fragment
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.cardview)
+    implementation(libs.cronet.embedded)
 
     kapt(libs.hilt.compiler)
 

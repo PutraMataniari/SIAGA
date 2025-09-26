@@ -88,6 +88,13 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
+
+        // 🔑 Link ke halaman lupa kata sandi
+        binding.Lupasandi.setOnClickListener {
+            val intent =
+                Intent(this, com.example.siaga.reset_sandi.ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun checkLoginStatus() = CoroutineScope(Dispatchers.IO).launch {
@@ -160,19 +167,4 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
-
-//    private fun showLoading() {
-//        if (loadingDialog == null) {
-//            val progressBar = ProgressBar(this)
-//            val builder = AlertDialog.Builder(this)
-//                .setView(progressBar)
-//                .setCancelable(false)
-//            loadingDialog = builder.create()
-//        }
-//        loadingDialog?.show()
-//    }
-//
-//    private fun hideLoading() {
-//        loadingDialog?.dismiss()
-//    }
 }

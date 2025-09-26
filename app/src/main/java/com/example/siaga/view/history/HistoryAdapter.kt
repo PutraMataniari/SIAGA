@@ -15,7 +15,7 @@
     import com.example.siaga.view.model.HistoryResponse
 
     object Constants {
-        const val BASE_URL_IMAGE = "http://192.168.50.89:8000/storage/"
+        const val BASE_URL_IMAGE = "http://192.168.1.11:8000/storage/"
     }
 
 
@@ -67,6 +67,8 @@
                 layoutLampiran.visibility = View.GONE
                 layoutStatusIzin.visibility = View.GONE
                 layoutCatatanAdmin.visibility = View.GONE
+                layoutWaktuKonfirmasi.visibility = View.GONE
+
 
                 when (data.jenis?.lowercase()) {
                     "masuk" -> {
@@ -94,12 +96,20 @@
                         layoutLampiran.visibility = View.VISIBLE
                         tvLampiran.text = data.bukti_asli ?: "-"
 
+                        // ✅ tampilkan Waktu Konfirmasi kalau ada & status bukan pending
+                        if (!data.waktu_konfirmasi.isNullOrEmpty() && data.status?.lowercase() != "proses_verifikasi") {
+                            tvWaktuKonfirmasi.visibility = View.VISIBLE
+                            tvWaktuKonfirmasi.text = data.getFormattedKonfirmasi()
+                        } else {
+                            tvWaktuKonfirmasi.visibility = View.GONE
+                        }
+
                         // ✅ tampilkan Status Izin
                         layoutStatusIzin.visibility = View.VISIBLE
                         when (data.status?.lowercase()) {
-                            "pending" -> {
-                                tvStatusIzin.text = "Pending"
-                                tvStatusIzin.setTextColor(Color.parseColor("#FFC107")) // kuning
+                            "proses_verifikasi" -> {
+                                tvStatusIzin.text = "Menunggu Verifikasi"
+                                tvStatusIzin.setTextColor(Color.parseColor("#2196F3")) // biru
                                 tvStatusIzin.setTypeface(null, android.graphics.Typeface.BOLD)
                             }
                             "ditolak" -> {
@@ -109,11 +119,11 @@
                             }
                             "disetujui" -> {
                                 tvStatusIzin.text = "Disetujui"
-                                tvStatusIzin.setTextColor(Color.parseColor("#2196F3")) // biru
+                                tvStatusIzin.setTextColor(Color.parseColor("#4CAF50")) // hijau
                                 tvStatusIzin.setTypeface(null, android.graphics.Typeface.BOLD)
                             }
                             else -> {
-                                tvStatusIzin.text = "Pending"
+                                tvStatusIzin.text = "Menunggu Verifikasi"
                                 tvStatusIzin.setTextColor(Color.GRAY)
                                 tvStatusIzin.setTypeface(null, android.graphics.Typeface.NORMAL)
                             }

@@ -10,7 +10,10 @@
     <string name="masukan_nip">Masukan NIP</string>
     <string name="welcome_to_siaga">Welcome to SIAGA</string>
     <string name="Selamat_Datang_Di_siaga">Selamat Datang Di SIAGA</string>
+    <string name="sistem">Sistem Informasi Absensi peGAwai</string>
+    <string name="kpu">KPU Provinsi Jambi</string>
     <string name="dropdown">dropdown</string>
+    <string name="otp">Kirim OTP</string>
 
     <string-array name="jenis_keterangan">
         <item>Cuti</item>
