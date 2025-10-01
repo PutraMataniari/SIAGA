@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Siaga" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryVariant">@color/holo_red_light</item>
         <item name="colorOnPrimary">@color/white</item>

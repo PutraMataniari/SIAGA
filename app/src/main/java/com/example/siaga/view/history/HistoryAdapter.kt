@@ -15,7 +15,7 @@
     import com.example.siaga.view.model.HistoryResponse
 
     object Constants {
-        const val BASE_URL_IMAGE = "http://192.168.1.11:8000/storage/"
+        const val BASE_URL_IMAGE = "http://192.168.1.12:8000/storage/"
     }
 
 
