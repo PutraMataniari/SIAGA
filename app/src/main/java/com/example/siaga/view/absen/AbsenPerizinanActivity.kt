@@ -44,6 +44,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.io.FileOutputStream
 
 class AbsenPerizinanActivity : AppCompatActivity() {
 
@@ -286,8 +287,10 @@ class AbsenPerizinanActivity : AppCompatActivity() {
     private fun sendAbsenToApi(token: String) {
         progressDialog.show()
 
-        val namaPart = binding.inputNama.text.toString().trim().toRequestBody("text/plain".toMediaType())
-        val lokasiPart = binding.inputLokasi.text.toString().trim().toRequestBody("text/plain".toMediaType())
+        val namaPart =
+            binding.inputNama.text.toString().trim().toRequestBody("text/plain".toMediaType())
+        val lokasiPart =
+            binding.inputLokasi.text.toString().trim().toRequestBody("text/plain".toMediaType())
         val jenisIzin = binding.inputketerangan.text.toString().trim().lowercase()
 
         if (jenisIzin.isEmpty()) {
@@ -298,67 +301,143 @@ class AbsenPerizinanActivity : AppCompatActivity() {
 
         val jenisIzinPart = jenisIzin.toRequestBody("text/plain".toMediaType())
 
-        // Validasi foto selfie
-        val fileGambar = File(strFilePath)
-        if (!fileGambar.exists()) {
-            Toast.makeText(this, "Foto selfie tidak ditemukan!", Toast.LENGTH_SHORT).show()
-            progressDialog.dismiss()
-            return
-        }
-        if (fileGambar.length() > 5 * 1024 * 1024) {
-            Toast.makeText(this, "Ukuran foto tidak boleh lebih dari 5MB", Toast.LENGTH_SHORT).show()
-            progressDialog.dismiss()
-            return
-        }
-        val gambarPart = MultipartBody.Part.createFormData(
-            "gambar",
-            fileGambar.name,
-            fileGambar.asRequestBody("image/*".toMediaType())
-        )
 
-        // Validasi file lampiran
-        val fileBukti = File(strLampiranPath)
-        if (!fileBukti.exists()) {
-            Toast.makeText(this, "Lampiran tidak ditemukan!", Toast.LENGTH_SHORT).show()
-            progressDialog.dismiss()
-            return
-        }
-        if (fileBukti.length() > 5 * 1024 * 1024) {
-            Toast.makeText(this, "Ukuran file lampiran tidak boleh lebih dari 5MB", Toast.LENGTH_SHORT).show()
-            progressDialog.dismiss()
-            return
-        }
-        val mimeTypeBukti = when {
-            strLampiranPath.endsWith("pdf", true) -> "application/pdf"
-            strLampiranPath.endsWith("doc", true) -> "application/msword"
-            strLampiranPath.endsWith("docx", true) -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            else -> "application/octet-stream"
-        }
-        val buktiPart = MultipartBody.Part.createFormData(
-            "bukti",
-            fileBukti.name,
-            fileBukti.asRequestBody(mimeTypeBukti.toMediaType())
-        )
-
-        // Panggil API
-        ApiClient.instance.submitIzin(token, namaPart, lokasiPart, jenisIzinPart, gambarPart, buktiPart)
-            .enqueue(object : Callback<IzinResponse> {
-                override fun onResponse(call: Call<IzinResponse>, response: Response<IzinResponse>) {
-                    progressDialog.dismiss()
-                    if (response.isSuccessful && response.body() != null) {
-                        val izinResponse = response.body()!!
-                        Toast.makeText(this@AbsenPerizinanActivity, izinResponse.message, Toast.LENGTH_LONG).show()
-                        if (izinResponse.status) finish()
-                    } else {
-                        Toast.makeText(this@AbsenPerizinanActivity, "Gagal mengirim izin (${response.code()})", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // Kompres gambar selfie
+                val originalGambar = File(strFilePath)
+                if (!originalGambar.exists()) {
+                    withContext(Dispatchers.Main) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            this@AbsenPerizinanActivity,
+                            "Foto selfie tidak ditemukan!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+
+                    return@launch
                 }
 
-                override fun onFailure(call: Call<IzinResponse>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(this@AbsenPerizinanActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                val compressedGambar = reduceImageFile(originalGambar, 1080, 80)
+                val gambarPart = MultipartBody.Part.createFormData(
+                    "gambar",
+                    compressedGambar.name,
+                    compressedGambar.asRequestBody("image/*".toMediaType())
+                )
+//        if (fileGambar.length() > 5 * 1024 * 1024) {
+//            Toast.makeText(this, "Ukuran foto tidak boleh lebih dari 5MB", Toast.LENGTH_SHORT).show()
+//            progressDialog.dismiss()
+//            return
+//        }
+//        val gambarPart = MultipartBody.Part.createFormData(
+//            "gambar",
+//            fileGambar.name,
+//            fileGambar.asRequestBody("image/*".toMediaType())
+//        )
+
+                // Validasi & kompres lampiran (jika gambar)
+                val fileBukti = File(strLampiranPath)
+                if (!fileBukti.exists()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@AbsenPerizinanActivity,
+                            "Lampiran tidak ditemukan!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        progressDialog.dismiss()
+                    }
+
+                    return@launch
                 }
-            })
+
+                val mimeTypeBukti = when {
+                    strLampiranPath.endsWith("pdf", true) -> "application/pdf"
+                    strLampiranPath.endsWith("doc", true) -> "application/msword"
+                    strLampiranPath.endsWith("docx", true) -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+                    else -> "application/octet-stream"
+                }
+
+                val finalLampiran: File = if (mimeTypeBukti.startsWith("image")) {
+
+                    //Kompres gambar lampiran juga
+                    reduceImageFile(fileBukti, 1080, 80)
+                } else fileBukti
+
+                //Cek ukuran maksimum 2MB (lampiran)
+                if (finalLampiran.length() > 2 * 1024 * 1024) {
+                    withContext(Dispatchers.Main) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            this@AbsenPerizinanActivity,
+                            "Ukuran file lampiran tidak boleh lebih dari 5MB",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+
+                val buktiPart = MultipartBody.Part.createFormData(
+                    "bukti",
+                    finalLampiran.name,
+                    finalLampiran.asRequestBody(mimeTypeBukti.toMediaType())
+                )
+
+                // Panggil API
+                withContext(Dispatchers.Main) {
+                    ApiClient.instance.submitIzin(
+                        token,
+                        namaPart,
+                        lokasiPart,
+                        jenisIzinPart,
+                        gambarPart,
+                        buktiPart
+                    )
+                        .enqueue(object : Callback<IzinResponse> {
+                            override fun onResponse(
+                                call: Call<IzinResponse>,
+                                response: Response<IzinResponse>
+                            ) {
+                                progressDialog.dismiss()
+                                if (response.isSuccessful && response.body() != null) {
+                                    val izinResponse = response.body()!!
+                                    Toast.makeText(
+                                        this@AbsenPerizinanActivity,
+                                        izinResponse.message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    if (izinResponse.status) finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@AbsenPerizinanActivity,
+                                        "Gagal mengirim izin (${response.code()})",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<IzinResponse>, t: Throwable) {
+                                progressDialog.dismiss()
+                                Toast.makeText(
+                                    this@AbsenPerizinanActivity,
+                                    "Error: ${t.localizedMessage}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        })
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@AbsenPerizinanActivity,
+                        "Kompresi gagal: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("PERIZINAN_COMPRESS", "Gagal kompres gambar/lampiran", e)
+                }
+            }
+        }
     }
 
 
@@ -396,6 +475,39 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         Glide.with(this).load(scaledBitmap).placeholder(R.drawable.ic_photo_camera).into(binding.imageSelfie)
         strBase64Photo = bitmapToBase64(scaledBitmap)
     }
+
+    @Throws(IOException::class)
+    private fun reduceImageFile(originalFile: File, maxWidth: Int = 1080, quality: Int = 80): File {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(originalFile.absolutePath, options)
+        val origWidth = options.outWidth
+        val origHeight = options.outHeight
+
+        var inSampleSize = 1
+        if (origWidth > maxWidth) {
+            inSampleSize = Math.max(1, Math.round(origWidth.toFloat() / maxWidth).toInt())
+        }
+
+        val decodeOptions = BitmapFactory.Options().apply { this.inSampleSize = inSampleSize }
+        val sampledBitmap = BitmapFactory.decodeFile(originalFile.absolutePath, decodeOptions)
+            ?: throw IOException("Gagal decode bitmap")
+
+        val finalBitmap: Bitmap = if (sampledBitmap.width > maxWidth) {
+            val ratio = maxWidth.toFloat() / sampledBitmap.width.toFloat()
+            val newH = (sampledBitmap.height * ratio).toInt()
+            Bitmap.createScaledBitmap(sampledBitmap, maxWidth, newH, true)
+        } else sampledBitmap
+
+        val compressedFile = File(cacheDir, "compressed_${originalFile.name}")
+        FileOutputStream(compressedFile).use { out ->
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            out.flush()
+        }
+
+        if (finalBitmap !== sampledBitmap) sampledBitmap.recycle()
+        return compressedFile
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) { finish(); return true }

@@ -33,6 +33,8 @@ fragment-ktx = "1.8.8"
 lifecycle = "2.9.2"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
+compressor = "3.0.1"
+
 
 datastoreCoreAndroid = "1.1.7"
 firebaseAppdistributionGradle = "5.1.1"
@@ -76,6 +78,9 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 #androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 #androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 #androidx-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
+
+#Compresor
+compressor = { group = "id.zelory", name = "compressor", version.ref = "compressor" }
 
 
 #Firebase

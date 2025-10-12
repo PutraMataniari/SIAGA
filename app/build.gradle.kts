@@ -93,6 +93,10 @@ dependencies {
 //hdodenhof
     implementation(libs.circleimageview)
 
+//Compressor (library kompres gambar)
+    implementation(libs.compressor)
+
+
 //    Fragment
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.cardview)

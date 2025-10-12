@@ -49,6 +49,8 @@ import java.util.*
 import androidx.exifinterface.media.ExifInterface
 import com.example.siaga.view.utils.BitmapManager
 import com.example.siaga.view.utils.BitmapManager.PhotoResult
+import java.io.FileOutputStream
+
 
 
 class AbsenPulangActivity : AppCompatActivity() {
@@ -338,54 +340,103 @@ class AbsenPulangActivity : AppCompatActivity() {
             return
         }
 
-        val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val gambarPart = MultipartBody.Part.createFormData("gambar", file.name, reqFile)
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                //Kompres gambar sebelum upload
+                val compressedFile = reduceImageFile(file, maxWidth = 1080, quality = 80)
 
-        showLoading()
+                Log.d(
+                    "COMPRESS",
+                    "Original: ${file.length() / 1024} KB | Compressed: ${compressedFile.length() / 1024} KB"
+                )
 
-        ApiClient.instance.absenPulang(token, namaBody, gambarPart, lokasiBody, laporanBody)
-            .enqueue(object : Callback<AbsensiResponse> {
-                override fun onResponse(call: Call<AbsensiResponse>, response: Response<AbsensiResponse>) {
-                    hideLoading()
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        Toast.makeText(this@AbsenPulangActivity, "Absen sukses: ${body?.message}", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        hideLoading()
-                        try {
-                            val errorBody = response.errorBody()?.string()
-                            val msg = if (!errorBody.isNullOrEmpty()) {
-                                val jsonObj = org.json.JSONObject(errorBody)
-                                jsonObj.optString("message", "Terjadi kesalahan (${response.code()})")
+
+                val reqFile = compressedFile.asRequestBody("image/*".toMediaTypeOrNull())
+                val gambarPart =
+                    MultipartBody.Part.createFormData("gambar", compressedFile.name, reqFile)
+
+                withContext(Dispatchers.Main) {
+                    showLoading()
+                }
+
+                ApiClient.instance.absenPulang(token, namaBody, gambarPart, lokasiBody, laporanBody)
+                    .enqueue(object : Callback<AbsensiResponse> {
+                        override fun onResponse(
+                            call: Call<AbsensiResponse>,
+                            response: Response<AbsensiResponse>
+                        ) {
+                            hideLoading()
+                            if (response.isSuccessful) {
+                                val body = response.body()
+                                Toast.makeText(
+                                    this@AbsenPulangActivity,
+                                    "Absen sukses: ${body?.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                finish()
                             } else {
-                                "Terjadi kesalahan (${response.code()})"
-                            }
+                                hideLoading()
+                                try {
+                                    val errorBody = response.errorBody()?.string()
+                                    val msg = if (!errorBody.isNullOrEmpty()) {
+                                        val jsonObj = org.json.JSONObject(errorBody)
+                                        jsonObj.optString(
+                                            "message",
+                                            "Terjadi kesalahan (${response.code()})"
+                                        )
+                                    } else {
+                                        "Terjadi kesalahan (${response.code()})"
+                                    }
 
-                            if (msg.contains("sudah absen", ignoreCase = true)) {
-                                AlertDialog.Builder(this@AbsenPulangActivity)
-                                    .setTitle("Peringatan")
-                                    .setMessage(msg)
-                                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                            } else {
-                                Toast.makeText(this@AbsenPulangActivity, msg, Toast.LENGTH_LONG).show()
-                            }
+                                    if (msg.contains("sudah absen", ignoreCase = true)) {
+                                        AlertDialog.Builder(this@AbsenPulangActivity)
+                                            .setTitle("Peringatan")
+                                            .setMessage(msg)
+                                            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                                            .show()
+                                    } else {
+                                        Toast.makeText(
+                                            this@AbsenPulangActivity,
+                                            msg,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
 
-                            Log.e("ABSEN_API", "Code: ${response.code()} - Msg: $msg")
-                        } catch (e: Exception) {
-                            Toast.makeText(this@AbsenPulangActivity, "Error ${response.code()}", Toast.LENGTH_LONG).show()
-                            Log.e("ABSEN_API", "Parsing error body gagal", e)
+                                    Log.e("ABSEN_API", "Code: ${response.code()} - Msg: $msg")
+                                } catch (e: Exception) {
+                                    Toast.makeText(
+                                        this@AbsenPulangActivity,
+                                        "Error ${response.code()}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    Log.e("ABSEN_API", "Parsing error body gagal", e)
+                                }
+                            }
                         }
-                    }
-                }
 
-                override fun onFailure(call: Call<AbsensiResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<AbsensiResponse>, t: Throwable) {
+                            hideLoading()
+                            Toast.makeText(
+                                this@AbsenPulangActivity,
+                                "Gagal: ${t.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            Log.e("ABSEN_API", "Failure: ${t.message}", t)
+                        }
+                    })
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
                     hideLoading()
-                    Toast.makeText(this@AbsenPulangActivity, "Gagal: ${t.message}", Toast.LENGTH_LONG).show()
-                    Log.e("ABSEN_API", "Failure: ${t.message}", t)
+                    Toast.makeText(
+                        this@AbsenPulangActivity,
+                        "Kompresi gagal: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    Log.e("COMPRESS_ERROR", "Gagal kompres gambar", e)
                 }
-            })
+            }
+        }
     }
 
 
@@ -448,6 +499,40 @@ class AbsenPulangActivity : AppCompatActivity() {
             Toast.makeText(this, "Gagal memproses foto!", Toast.LENGTH_SHORT).show()
             Log.e("CONVERT_IMAGE", "Error: ${e.message}", e)
         }
+    }
+
+    @Throws(IOException::class)
+    private fun reduceImageFile(originalFile: File, maxWidth: Int = 1080, quality: Int = 80): File {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(originalFile.absolutePath, options)
+        val origWidth = options.outWidth
+        val origHeight = options.outHeight
+
+        var inSampleSize = 1
+        if (origWidth > maxWidth) {
+            inSampleSize = Math.max(1, Math.round(origWidth.toFloat() / maxWidth).toInt())
+        }
+
+        val decodeOptions = BitmapFactory.Options().apply { this.inSampleSize = inSampleSize }
+        val sampledBitmap = BitmapFactory.decodeFile(originalFile.absolutePath, decodeOptions)
+            ?: throw IOException("Gagal decode bitmap")
+
+        val finalBitmap: Bitmap = if (sampledBitmap.width > maxWidth) {
+            val ratio = maxWidth.toFloat() / sampledBitmap.width.toFloat()
+            val newH = (sampledBitmap.height * ratio).toInt()
+            Bitmap.createScaledBitmap(sampledBitmap, maxWidth, newH, true)
+        } else {
+            sampledBitmap
+        }
+
+        val compressedFile = File(cacheDir, "compressed_${originalFile.name}")
+        FileOutputStream(compressedFile).use { out ->
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            out.flush()
+        }
+
+        if (finalBitmap !== sampledBitmap) sampledBitmap.recycle()
+        return compressedFile
     }
 
 

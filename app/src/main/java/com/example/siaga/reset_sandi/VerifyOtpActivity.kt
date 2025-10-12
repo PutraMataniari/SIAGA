@@ -1,9 +1,12 @@
 package com.example.siaga.reset_sandi
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.siaga.R
 import com.example.siaga.api.ApiClient
 import com.example.siaga.databinding.ActivityVerifyOtpBinding
 import com.example.siaga.model.ResetResponse
@@ -14,6 +17,7 @@ import retrofit2.Response
 
 class VerifyOtpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVerifyOtpBinding
+    private var loadingDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,9 @@ class VerifyOtpActivity : AppCompatActivity() {
                 Toast.makeText(this, "Lengkapi data (OTP & password min 6 karakter)!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            //tampilkan loading dialog
+            showLoadingDialog("Memperbarui password Anda...")
 
             ApiClient.instance.resetPassword(email, otp, newPass)
                 .enqueue(object : Callback<ResetResponse> {
@@ -61,5 +68,28 @@ class VerifyOtpActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    /** Menampilkan dialog loading */
+    private fun showLoadingDialog(message: String) {
+        if (loadingDialog == null) {
+            val builder = AlertDialog.Builder(this)
+            val inflater = layoutInflater
+            val view = inflater.inflate(R.layout.dialog_loading, null)
+            val textMessage = view.findViewById<TextView>(R.id.textMessage)
+            textMessage.text = message
+            builder.setView(view)
+            builder.setCancelable(false)
+            loadingDialog = builder.create()
+        } else {
+            val textMessage = loadingDialog?.findViewById<TextView>(R.id.textMessage)
+            textMessage?.text = message
+        }
+        loadingDialog?.show()
+    }
+
+    /** Menyembunyikan dialog loading */
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
     }
 }

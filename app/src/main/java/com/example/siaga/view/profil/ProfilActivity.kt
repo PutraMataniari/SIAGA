@@ -3,6 +3,7 @@ package com.example.siaga.view.profil
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ class ProfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfilBinding
     private lateinit var dataStoreManager: DataStoreManager
+    private var loadingDialog: AlertDialog? = null
 
     private val editProfileLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
@@ -92,6 +94,28 @@ class ProfilActivity : AppCompatActivity() {
         }
     }
 
+    /** ==================== LOADING DIALOG ==================== */
+    private fun showLoadingDialog(message: String) {
+        if (loadingDialog == null) {
+            val builder = AlertDialog.Builder(this)
+            val inflater = layoutInflater
+            val view = inflater.inflate(R.layout.dialog_loading, null)
+            val textMessage = view.findViewById<TextView>(R.id.textMessage)
+            textMessage.text = message
+            builder.setView(view)
+            builder.setCancelable(false)
+            loadingDialog = builder.create()
+        } else {
+            val textMessage = loadingDialog?.findViewById<TextView>(R.id.textMessage)
+            textMessage?.text = message
+        }
+        loadingDialog?.show()
+    }
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
+    }
+
     /**
      * Ambil data profil dari API
      */
@@ -106,23 +130,20 @@ class ProfilActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                showLoading(true)
+                showLoadingDialog("Memuat data profil...")
 
                 // 🔹 Ambil data profil dari API
                 val response = ApiClient.instance.getProfil("Bearer $token")
                 updateProfilUI(response)
 
             } catch (e: IOException) {
-                showLoading(false)
                 Toast.makeText(this@ProfilActivity, "Gagal terhubung ke server", Toast.LENGTH_LONG).show()
             } catch (e: HttpException) {
-                showLoading(false)
                 Toast.makeText(this@ProfilActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
-                showLoading(false)
                 Toast.makeText(this@ProfilActivity, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_LONG).show()
             } finally {
-                showLoading(false)
+                hideLoadingDialog()
             }
         }
     }
@@ -155,12 +176,6 @@ class ProfilActivity : AppCompatActivity() {
             .into(binding.profileImage)
     }
 
-    /**
-     * Tampilkan atau sembunyikan loading indicator
-     */
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
 
     /**
      * Navigasi ke halaman login jika token hilang / expired

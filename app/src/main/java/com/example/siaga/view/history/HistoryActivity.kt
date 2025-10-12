@@ -164,7 +164,13 @@ class HistoryActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
 
                 if (response.isSuccessful && response.body() != null) {
-                    originalList = response.body()!!.data
+                    originalList = response.body()!!.data.sortedByDescending {
+                        try {
+                            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(it.waktu_absen)
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
                     filterData()
                 } else {
                     showError("Gagal memuat data: ${response.message()}")
@@ -211,6 +217,12 @@ class HistoryActivity : AppCompatActivity() {
             }
         } else {
             filteredByDate
+        }.sortedByDescending {
+            try {
+                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(it.waktu_absen)
+            } catch (e: Exception) {
+                null
+            }
         }
 
         if (finalFiltered.isEmpty()) {
