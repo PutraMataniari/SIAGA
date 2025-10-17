@@ -93,9 +93,11 @@ dependencies {
 //hdodenhof
     implementation(libs.circleimageview)
 
+//refreshlayout
+    implementation(libs.androidx.swiperefreshlayout)
+
 //Compressor (library kompres gambar)
     implementation(libs.compressor)
-
 
 //    Fragment
     implementation(libs.androidx.fragment.ktx)

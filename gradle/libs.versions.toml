@@ -34,7 +34,7 @@ lifecycle = "2.9.2"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
 compressor = "3.0.1"
-
+swiperefreshlayout = "1.2.0-alpha01"
 
 datastoreCoreAndroid = "1.1.7"
 firebaseAppdistributionGradle = "5.1.1"
@@ -57,31 +57,12 @@ androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", vers
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
-#Compose
-#androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-#androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-#androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-#androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-#androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-#androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-#androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-#androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-#androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-
 #Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
-#Room
-#androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
-#androidx-room-runtime-jvm = { group = "androidx.room", name = "room-runtime-jvm", version.ref = "roomRuntimeJvm" }
-#androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-#androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-#androidx-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
-
 #Compresor
 compressor = { group = "id.zelory", name = "compressor", version.ref = "compressor" }
-
 
 #Firebase
 #firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
@@ -110,6 +91,10 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "datastore" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
+
+#swiperefreshlayout
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+
 
 circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }

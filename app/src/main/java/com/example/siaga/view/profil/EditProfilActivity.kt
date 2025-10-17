@@ -20,6 +20,7 @@ import com.example.siaga.R
 import com.example.siaga.api.ApiClient
 import com.example.siaga.databinding.ActivityEditProfilBinding
 import com.example.siaga.datastore.DataStoreManager
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -193,32 +194,75 @@ class EditProfilActivity : AppCompatActivity() {
     }
 
     /** ==================== DATE PICKER ==================== */
-    private fun showDatePicker() {
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            calendar.set(Calendar.DAY_OF_MONTH, day)
+//    private fun showDatePicker() {
+//        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+//            calendar.set(Calendar.YEAR, year)
+//            calendar.set(Calendar.MONTH, month)
+//            calendar.set(Calendar.DAY_OF_MONTH, day)
+//
+//            val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+//            binding.inputTanggalLhr1.setText(sdf.format(calendar.time))
+//        }
+//
+//        // Gunakan tanggal lama dari server jika ada
+//        val dateParts = tanggalLahirLama?.split("-")
+//        if (dateParts?.size == 3) {
+//            val year = dateParts[0].toInt()
+//            val month = dateParts[1].toInt() - 1
+//            val day = dateParts[2].toInt()
+//            DatePickerDialog(this, dateSetListener, year, month, day).show()
+//        } else {
+//            DatePickerDialog(
+//                this, dateSetListener,
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+//            ).show()
+//        }
+//    }
 
-            val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-            binding.inputTanggalLhr1.setText(sdf.format(calendar.time))
+    private fun showDatePicker() {
+        // Batas tahun yang diizinkan
+        val constraints = com.google.android.material.datepicker.CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().apply { set(1950, 0, 1) }.timeInMillis)
+            .setEnd(Calendar.getInstance().apply { set(2025, 11, 31) }.timeInMillis)
+            .build()
+
+        // Inisialisasi tanggal awal (pakai tanggal lama jika ada)
+        var initialSelection = MaterialDatePicker.todayInUtcMilliseconds()
+        tanggalLahirLama?.let { tgl ->
+            try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = sdf.parse(tgl)
+                if (date != null) {
+                    initialSelection = date.time
+                }
+            } catch (_: Exception) { }
         }
 
-        // Gunakan tanggal lama dari server jika ada
-        val dateParts = tanggalLahirLama?.split("-")
-        if (dateParts?.size == 3) {
-            val year = dateParts[0].toInt()
-            val month = dateParts[1].toInt() - 1
-            val day = dateParts[2].toInt()
-            DatePickerDialog(this, dateSetListener, year, month, day).show()
-        } else {
-            DatePickerDialog(
-                this, dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+        val picker = com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Pilih Tanggal Lahir")
+            .setCalendarConstraints(constraints)
+            .setSelection(initialSelection)
+            .build()
+
+        picker.show(supportFragmentManager, "DATE_PICKER")
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            calendar.timeInMillis = selection
+
+            // Format tampilan ke user (dd-MM-yyyy)
+            val displayFormat = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
+            val formattedDisplayDate = displayFormat.format(calendar.time)
+            binding.inputTanggalLhr1.setText(formattedDisplayDate)
+
+            // Simpan format API (yyyy-MM-dd) untuk dikirim nanti
+            val apiFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            tanggalLahirLama = apiFormat.format(calendar.time)
         }
     }
+
 
     /** ==================== CONFIRMATION DIALOG ==================== */
     private fun showSaveConfirmationDialog() {

@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
+
     <!-- Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -73,16 +74,20 @@
                 app:iconTint="@color/black"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/btnPilihBulan"-->
-<!--                style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:text="Pilih Bulan" />-->
-
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 🔹 Bagian yang bisa di-refresh -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <!-- Di dalam SwipeRefreshLayout hanya boleh 1 child -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -112,5 +117,8 @@
         android:textSize="18sp"
         android:fontFamily="@font/poppins_semibold"
         android:visibility="gone" />
+
+    </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -154,12 +154,22 @@ class AbsenPerizinanActivity : AppCompatActivity() {
         fetchToken()
         setupKeteranganDropdown()
         setInitLayout()
+        setupIcBack()
 
         requestPermissions.launch(
             arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         )
 
         setUploadData()
+    }
+
+    /**
+     * Tombol kembali → kembali ke MainActivity
+     */
+    private fun setupIcBack() {
+        binding.icback.setOnClickListener {
+            finish() // lebih baik daripada startActivity(MainActivity)
+        }
     }
 
     private fun fetchToken() {

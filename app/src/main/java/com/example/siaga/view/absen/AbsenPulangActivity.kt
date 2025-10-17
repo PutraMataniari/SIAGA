@@ -115,6 +115,7 @@ class AbsenPulangActivity : AppCompatActivity() {
         initLoading()
         fetchToken()
         setInitLayout()
+        setupIcBack()
 
         // Minta izin kamera + lokasi di awal
         requestPermissions.launch(
@@ -126,6 +127,15 @@ class AbsenPulangActivity : AppCompatActivity() {
         )
 
         setUploadData()
+    }
+
+    /**
+     * Tombol kembali → kembali ke MainActivity
+     */
+    private fun setupIcBack() {
+        binding.icback.setOnClickListener {
+            finish() // lebih baik daripada startActivity(MainActivity)
+        }
     }
 
     private fun initLoading() {

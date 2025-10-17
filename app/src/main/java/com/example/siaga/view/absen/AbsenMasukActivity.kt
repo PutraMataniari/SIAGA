@@ -115,6 +115,8 @@ class AbsenMasukActivity : AppCompatActivity() {
 
         initLoading()
         setInitLayout()
+        setupIcBack()
+
 
         requestPermissions.launch(
             arrayOf(
@@ -125,6 +127,15 @@ class AbsenMasukActivity : AppCompatActivity() {
         )
 
         setUploadData()
+    }
+
+    /**
+     * Tombol kembali → kembali ke MainActivity
+     */
+    private fun setupIcBack() {
+        binding.icback.setOnClickListener {
+            finish() // lebih baik daripada startActivity(MainActivity)
+        }
     }
 
     private fun initLoading() {

@@ -19,6 +19,9 @@ import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import androidx.appcompat.widget.SearchView
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.Month
 import java.util.*
 
 class HistoryActivity : AppCompatActivity() {
@@ -53,6 +56,7 @@ class HistoryActivity : AppCompatActivity() {
         setupSearch()
         setupFilterDropdown()
         setupMonthPicker()
+        setupSwipeRefresh()
         loadHistoryData()
     }
 
@@ -86,53 +90,119 @@ class HistoryActivity : AppCompatActivity() {
     private fun setupMonthPicker() {
         binding.btnPilihBulan.setOnClickListener {
             if (selectedMonth != null) {
-                // Reset bulan kalau user klik lagi
+                // Reset filter bulan
                 selectedMonth = null
-                binding.btnPilihBulan.text = "Pilih Bulan"
+                binding.btnPilihBulan.text = "Pilih Bulan dan Tahun"
                 binding.btnPilihBulan.icon = null
                 Toast.makeText(this, "Filter bulan direset", Toast.LENGTH_SHORT).show()
                 filterData()
             } else {
-                val calendar = Calendar.getInstance()
-                val year = calendar.get(Calendar.YEAR)
-                val month = calendar.get(Calendar.MONTH)
+                val constraints = CalendarConstraints.Builder()
+                    .setStart(Calendar.getInstance().apply { set(2020, 0, 1) }.timeInMillis)
+                    .setEnd(Calendar.getInstance().apply { set(2100, 11, 31) }.timeInMillis)
+                    .build()
 
-                val dialog = DatePickerDialog(
-                    this,
-                    { _, selectedYear, selectedMonthIndex, _ ->
-                        val monthNumber = String.format("%02d", selectedMonthIndex + 1)
-                        selectedMonth = "$selectedYear-$monthNumber"
+                val picker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Pilih Bulan dan Tahun")
+                    .setCalendarConstraints(constraints)
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
 
-                        //Mengubah tombol menjadi nama bulan yang di pilih
-                        val monthName = try {
-                            SimpleDateFormat("MMMM yyyy", Locale("id", "ID"))
-                                .format(Calendar.getInstance().apply {
-                                    set(Calendar.YEAR, selectedYear)
-                                    set(Calendar.MONTH, selectedMonthIndex)
-                                }.time)
-                        } catch (e: Exception) {
-                            "$selectedYear-$monthNumber"
-                        }
+                picker.show(supportFragmentManager, "MonthPicker")
 
-                        binding.btnPilihBulan.text = monthName
-                        binding.btnPilihBulan.setIconResource(com.example.siaga.R.drawable.ic_clear)
-
-                        filterData()
-                    },
-                    year,
-                    month,
-                    1
+                // ⬇️ Setelah dialog muncul, paksa ubah tampilannya ke mode "year" (agar user hanya pilih bulan)
+                supportFragmentManager.executePendingTransactions()
+                val toggle = picker.dialog?.findViewById<View>(
+                    com.google.android.material.R.id.mtrl_picker_header_toggle
                 )
+                toggle?.performClick() // ini ubah tampilan ke mode tahun (bulan terlihat, tanpa tanggal)
 
-                // sembunyikan pilihan tanggal
-                dialog.datePicker.findViewById<View>(
-                    resources.getIdentifier("day", "id", "android")
-                )?.visibility = View.GONE
+                picker.addOnPositiveButtonClickListener { selection ->
+                    val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                    cal.timeInMillis = selection
 
-                dialog.show()
+                    val year = cal.get(Calendar.YEAR)
+                    val monthIndex = cal.get(Calendar.MONTH)
+                    val monthNumber = String.format("%02d", monthIndex + 1)
+
+                    selectedMonth = "$year-$monthNumber"
+
+                    val monthName = SimpleDateFormat("MMMM yyyy", Locale("id", "ID")).format(cal.time)
+                    binding.btnPilihBulan.text = monthName
+                    binding.btnPilihBulan.setIconResource(com.example.siaga.R.drawable.ic_clear)
+
+                    filterData()
+                }
             }
         }
     }
+
+//    private fun setupMonthPicker() {
+//        binding.btnPilihBulan.setOnClickListener {
+//            if (selectedMonth != null) {
+//                // Reset bulan kalau user klik lagi
+//                selectedMonth = null
+//                binding.btnPilihBulan.text = "Pilih Bulan"
+//                binding.btnPilihBulan.icon = null
+//                Toast.makeText(this, "Filter bulan direset", Toast.LENGTH_SHORT).show()
+//                filterData()
+//            } else {
+//                val calendar = Calendar.getInstance()
+//                val year = calendar.get(Calendar.YEAR)
+//                val month = calendar.get(Calendar.MONTH)
+//
+//                val dialog = DatePickerDialog(
+//                    this,
+//                    { _, selectedYear, selectedMonthIndex, _ ->
+//                        val monthNumber = String.format("%02d", selectedMonthIndex + 1)
+//                        selectedMonth = "$selectedYear-$monthNumber"
+//
+//                        //Mengubah tombol menjadi nama bulan yang di pilih
+//                        val monthName = try {
+//                            SimpleDateFormat("MMMM yyyy", Locale("id", "ID"))
+//                                .format(Calendar.getInstance().apply {
+//                                    set(Calendar.YEAR, selectedYear)
+//                                    set(Calendar.MONTH, selectedMonthIndex)
+//                                }.time)
+//                        } catch (e: Exception) {
+//                            "$selectedYear-$monthNumber"
+//                        }
+//
+//                        binding.btnPilihBulan.text = monthName
+//                        binding.btnPilihBulan.setIconResource(com.example.siaga.R.drawable.ic_clear)
+//
+//                        filterData()
+//                    },
+//                    year,
+//                    month,
+//                    1
+//                )
+//
+//                // sembunyikan pilihan tanggal - hanya tampilkan bulan & tahun
+//
+//                //                dialog.datePicker.findViewById<View>(
+////                    resources.getIdentifier("day", "id", "android")
+////                )?.visibility = View.GONE
+////
+////                dialog.show()
+//
+//                val dayFieldId = resources.getIdentifier("day", "id", "android")
+//                val dayPicker = dialog.datePicker.findViewById<View>(dayFieldId)
+//                dayPicker?.visibility = View.GONE
+//
+//                //Tambahkan logika agar klik tanggal tidak mempengaruhi filter
+//                dialog.datePicker.init(year, month, 1) { _, selectedYear, selectedMonthIndex, _ ->
+//                    val monthNumber = String.format("%02d", selectedMonthIndex + 1)
+//                    selectedMonth = "$selectedYear-$monthNumber"
+//                }
+//
+//                //Mengubah title dialog agar lebih jelas
+//                dialog.setTitle("Pilih Bulan dan Tahun")
+//
+//                dialog.show()
+//            }
+//        }
+//    }
 
     private fun setupRecyclerView() {
         historyAdapter = HistoryAdapter(mutableListOf())
@@ -140,6 +210,19 @@ class HistoryActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@HistoryActivity)
             adapter = historyAdapter
             setHasFixedSize(true)
+        }
+    }
+
+    // ⤵️ Tambahkan fungsi ini di bawah setupRecyclerView()
+    private fun setupSwipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = true
+
+            scope.launch {
+                delay(500) // opsional biar animasi refresh lebih smooth
+                loadHistoryData()
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
         }
     }
 
@@ -278,3 +361,4 @@ class HistoryActivity : AppCompatActivity() {
         job.cancel()
     }
 }
+

@@ -16,14 +16,18 @@ import com.example.siaga.api.ApiClient
 import com.example.siaga.databinding.ActivitySignupBinding
 import com.example.siaga.model.RegisterResponse
 import com.example.siaga.view.login.LoginActivity
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
@@ -64,7 +68,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         // Dropdown Jabatan
-        val jabatannList = listOf("Kabag", "Kasubag", "Pelaksana")
+        val jabatannList = listOf("Kepala Bagian", "Kepala Sub Bagian", "Pelaksana")
         val jabatanAdapter = ArrayAdapter(this, R.layout.list_item_dropdown, jabatannList)
         binding.inputJabatan.setAdapter(jabatanAdapter)
 
@@ -79,17 +83,47 @@ class SignUpActivity : AppCompatActivity() {
         binding.inputBagian.setAdapter(bagianAdapter)
     }
 
-    private fun showDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+//    private fun showDatePicker() {
+//        val calendar = Calendar.getInstance()
+//        val year = calendar.get(Calendar.YEAR)
+//        val month = calendar.get(Calendar.MONTH)
+//        val day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//        DatePickerDialog(this, { _, d, m, y ->
+//            //Format D-M-Y
+//            val tanggalFormat = String.format("%04d-%02d-%02d", d, m + 1, y)
+//            binding.inputTanggalLhr.setText(tanggalFormat)
+//        }, year, month, day).show()
+//    }
 
-        DatePickerDialog(this, { _, d, m, y ->
-            //Format D-M-Y
-            val tanggalFormat = String.format("%04d-%02d-%02d", d, m + 1, y)
-            binding.inputTanggalLhr.setText(tanggalFormat)
-        }, year, month, day).show()
+    private fun showDatePicker() {
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().apply { set(1950, 0, 1) }.timeInMillis) // batas awal tahun lahir
+            .setEnd(Calendar.getInstance().apply { set(2025, 11, 31) }.timeInMillis) // batas akhir
+            .build()
+
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Pilih Tanggal Lahir")
+            .setCalendarConstraints(constraints)
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .build()
+
+        picker.show(supportFragmentManager, "DATE_PICKER")
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            calendar.timeInMillis = selection
+
+            // format tampilan ke user (misal dd-MM-yyyy)
+            val displayFormat = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
+            binding.inputTanggalLhr.setText(displayFormat.format(calendar.time))
+
+            // format untuk dikirim ke API (yyyy-MM-dd)
+            val apiFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            binding.inputTanggalLhr.tag = apiFormat.format(calendar.time)
+
+//            binding.inputTanggalLhr.setText(formattedDate)
+        }
     }
 
     private fun registerUser() {
@@ -97,7 +131,8 @@ class SignUpActivity : AppCompatActivity() {
         val nip = binding.inputNIP.text.toString().trim()
         val email = binding.inputEmail.text.toString().trim()
         val noTelp = binding.inputNoTelp.text.toString().trim()
-        val tanggalLahir = binding.inputTanggalLhr.text.toString().trim()
+//        val tanggalLahir = binding.inputTanggalLhr.text.toString().trim()
+        val tanggalLahir = binding.inputTanggalLhr.tag?.toString() ?: ""
         val jabatan = binding.inputJabatan.text.toString().trim()
         val bagian = binding.inputBagian.text.toString().trim()
         val subBagian = binding.inputSubBagian.text.toString().trim()
@@ -147,7 +182,7 @@ class SignUpActivity : AppCompatActivity() {
         }
         if (file.length() > MAX_IMAGE_SIZE) {
             progressDialog.dismiss()
-            Toast.makeText(this, "Ukuran foto maksimal 5MB!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Ukuran foto maksimal 10MB!", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -172,17 +207,58 @@ class SignUpActivity : AppCompatActivity() {
                 // Selalu tutup progressDialog di awal onResponse
                 progressDialog.dismiss()
 
+//                if (response.isSuccessful && response.body() != null) {
+//                    val body = response.body()!!
+//                    Toast.makeText(this@SignUpActivity, "Register sukses: ${body.message}", Toast.LENGTH_SHORT).show()
+//                    startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
+//                    finish()
+//                } else {
+//
+//                    // Tangani error validasi atau error server
+//                    val errorMsg = response.errorBody()?.string() ?: "Terjadi kesalahan saat register"
+//                    Toast.makeText(this@SignUpActivity, errorMsg, Toast.LENGTH_LONG).show()
+//                }
+
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     Toast.makeText(this@SignUpActivity, "Register sukses: ${body.message}", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
                     finish()
                 } else {
+                    val errorBody = response.errorBody()?.string()
+                    if (errorBody != null) {
+                        try {
+                            val json = JSONObject(errorBody)
+                            if (json.has("errors")) {
+                                val errors = json.getJSONObject("errors")
 
-                    // Tangani error validasi atau error server
-                    val errorMsg = response.errorBody()?.string() ?: "Terjadi kesalahan saat register"
-                    Toast.makeText(this@SignUpActivity, errorMsg, Toast.LENGTH_LONG).show()
+                                when {
+                                    errors.has("email") -> {
+                                        val msg = errors.getJSONArray("email").getString(0)
+                                        Toast.makeText(this@SignUpActivity, "Email sudah digunakan!", Toast.LENGTH_LONG).show()
+                                    }
+                                    errors.has("nip") -> {
+                                        val msg = errors.getJSONArray("nip").getString(0)
+                                        Toast.makeText(this@SignUpActivity, "NIP sudah digunakan!", Toast.LENGTH_LONG).show()
+                                    }
+                                    else -> {
+                                        val msg = json.optString("message", "Pendaftaran gagal")
+                                        Toast.makeText(this@SignUpActivity, msg, Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            } else {
+                                val msg = json.optString("message", "Terjadi kesalahan saat register")
+                                Toast.makeText(this@SignUpActivity, msg, Toast.LENGTH_LONG).show()
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(this@SignUpActivity, "Terjadi kesalahan pada server", Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        Toast.makeText(this@SignUpActivity, "Terjadi kesalahan saat register", Toast.LENGTH_LONG).show()
+                    }
                 }
+
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
